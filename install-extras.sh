@@ -27,7 +27,8 @@ sed -i 's/user-session=ubuntu/user-session=gnome-fallback/g' /usr/share/lightdm/
 sed -i 's/XSession=ubuntu/Xsession=gnome-fallback/g' /var/lib/AccountsService/users/$SUDO_USER
 
 # Install oracle java and UvAvpn
-add-apt-repository -y ppa:webupd8team/java ppa:uva-informatica/uvavpn
+add-apt-repository -y ppa:webupd8team/java
+add-apt-repository -y ppa:uva-informatica/uvavpn
 apt-get update
 echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
 apt-get -y install oracle-java8-installer oracle-java8-set-default  uvavpn

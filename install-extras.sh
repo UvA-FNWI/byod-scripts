@@ -33,13 +33,13 @@ echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | su
 apt-get -y install oracle-java8-installer oracle-java8-set-default  uvavpn
 
 # Install development tools
-apt-get -y install build-essential git vim valgrind flex bison
+apt-get -y install build-essential git vim valgrind flex bison gnuplot
 
 # Programming languages for the programming-languages course
 apt-get -y install lua5.2 liblua5.2-dev swi-prolog erlang ghc
 
 # Install several python packages
-apt-get -y install python-scipy python3-scipy
+apt-get -y install python-scipy python-numpy python-matplotlib python3-scipy python3-numpy python3-matplotlib
 
 # Install Chromium
 apt-get -y install chromium-browser

@@ -35,6 +35,9 @@ apt-get -y install oracle-java8-installer oracle-java8-set-default  uvavpn
 # Install development tools
 apt-get -y install build-essential git vim valgrind flex bison
 
+# Programming languages for the programming-languages course
+apt-get -y install lua5.2 liblua5.2-dev swi-prolog erlang ghc
+
 # Install several python packages
 apt-get -y install python-scipy python3-scipy
 

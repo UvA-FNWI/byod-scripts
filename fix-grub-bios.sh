@@ -15,7 +15,7 @@ fi
 mkdir -p /media/SYSTEM_RESERVED
 mount $SYS_RESERVED /media/SYSTEM_RESERVED
 cat << __EOF__ >> /etc/grub.d/40_custom
-if [ "${grub_platform}" == "pc" ]; then
+if [ "\${grub_platform}" == "pc" ]; then
 	menuentry "Microsoft Windows Vista/7/8/8.1" {
 		insmod part_msdos
 		insmod ntfs

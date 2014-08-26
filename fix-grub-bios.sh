@@ -9,8 +9,14 @@ fi
 
 # Prompt the user for the system reserved partition.
 if test -z $SYS_RESERVED; then
-echo "warning: system reserved not found.";
-read -p "Please specify the path of the system reserved partition (e.g. /dev/sda1): " SYS_RESERVED
+echo "warning: system reserved partition not found.";
+read -p "Please specify the path of the system reserved partition (e.g. /dev/sda1): " SYS_RESERVED;
+fi
+
+# Check if the user told us anything about the partition.
+if test -z $SYS_RESERVED; then
+echo "error: system reserved partition not known."
+exit 1;
 fi
 
 # Attempt to mount the partition.

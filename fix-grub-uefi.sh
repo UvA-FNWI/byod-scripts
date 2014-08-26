@@ -10,16 +10,14 @@ fi
 mkdir -p /media/EFI_SYS
 mount $EFI_SYS /media/EFI_SYS
 cat << __EOF__ >> /etc/grub.d/40_custom
-if [ "${grub_platform}" == "pc" ]; then
-	menuentry "Microsoft Windows Vista/7/8/8.1" {
-		insmod part_gpt
-		insmod fat
-		insmod search_fs_uuid
-		insmod chain
-		search --fs-uuid --set=root $(grub-probe --target=hints_string /media/EFI_SYS/EFI/Microsoft/Boot/bootmgfw.efi) $(grub-probe --target=fs_uuid /media/EFI_SYS/EFI/Microsoft/Boot/bootmgfw.efi)
-		chainloader /EFI/Microsoft/Boot/bootmgfw.efi
-	}
-fi
+menuentry "Microsoft Windows Vista/7/8/8.1" {
+	insmod part_gpt
+	insmod fat
+	insmod search_fs_uuid
+	insmod chain
+	search --fs-uuid --set=root $(grub-probe --target=hints_string /media/EFI_SYS/EFI/Microsoft/Boot/bootmgfw.efi) $(grub-probe --target=fs_uuid /media/EFI_SYS/EFI/Microsoft/Boot/bootmgfw.efi)
+	chainloader /EFI/Microsoft/Boot/bootmgfw.efi
+}
 __EOF__
 #update-grub
 umount /media/EFI_SYS

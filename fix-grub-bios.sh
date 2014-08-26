@@ -26,6 +26,7 @@ if [ "${grub_platform}" == "pc" ]; then
 	}
 fi
 __EOF__
+update-grub
 umount /media/SYSTEM_RESERVED
 rmdir /media/SYSTEM_RESERVED
 

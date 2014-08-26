@@ -1,6 +1,5 @@
 if test -z $EFI_SYS; then
-export EFI_SYS=$(blkid | grep -m1 'PARTLABEL="EFI system partition"' | cut -d
-':' -f1);
+export EFI_SYS=$(blkid | grep -m1 'PARTLABEL="EFI system partition"' | cut -d ':' -f1);
 fi
 
 if test -z $EFI_SYS; then

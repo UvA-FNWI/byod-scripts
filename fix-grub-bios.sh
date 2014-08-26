@@ -43,7 +43,7 @@ export HINTS_STRING=$(grub-probe --target=hints_string /media/SYSTEM_RESERVED/bo
 export FS_UUID=$(grub-probe --target=fs_uuid /media/SYSTEM_RESERVED/bootmgr 2>$ELOG)
 
 # Make sure we have got those details.
-if test -z $HINTS_STRING || test -z $FS_UUID; then
+if test -z "$HINTS_STRING" || test -z "$FS_UUID"; then
 echo "error: is grub-probe installed?";
 umount /media/SYSTEM_RESERVED 2>$ELOG
 rmdir /media/SYSTEM_RESERVED 2>$ELOG

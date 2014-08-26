@@ -34,7 +34,7 @@ export HINTS_STRING=$(grub-probe --target=hints_string /media/EFI_SYS/EFI/Micros
 export FS_UUID=$(grub-probe --target=fs_uuid /media/EFI_SYS/EFI/Microsoft/Boot/bootmgfw.efi 2>$ELOG)
 
 # Make sure we have got those details.
-if test -z $HINTS_STRING || test -z $FS_UUID; then
+if test -z "$HINTS_STRING" || test -z "$FS_UUID"; then
 echo "error: is grub-probe installed?"
 umount /media/EFI_SYS 2>$ELOG
 rmdir /media/EFI_SYS 2>$ELOG

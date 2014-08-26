@@ -31,7 +31,7 @@ fi
 
 # Ask GRUB for some necessary details to put into the menu entry.
 export HINTS_STRING=$(grub-probe --target=hints_string /media/EFI_SYS/EFI/Microsoft/Boot/bootmgfw.efi 2>$ELOG)
-export FS_UUID= $(grub-probe --target=fs_uuid /media/EFI_SYS/EFI/Microsoft/Boot/bootmgfw.efi 2>$ELOG)
+export FS_UUID=$(grub-probe --target=fs_uuid /media/EFI_SYS/EFI/Microsoft/Boot/bootmgfw.efi 2>$ELOG)
 
 # Make sure we have got those details.
 if test -z $HINTS_STRING || test -z $FS_UUID; then

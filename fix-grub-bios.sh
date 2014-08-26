@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # For debugging purposes.
 if test -z $ELOG; then
 export ELOG=/dev/null

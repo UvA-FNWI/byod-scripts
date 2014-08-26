@@ -1,12 +1,12 @@
 # Attempt to find the EFI system partition.
 if test -z $EFI_SYS; then
-export EFI_SYS=$(blkid 2>/dev/null | grep -m1 'PARTLABEL="EFI system partition"' 2>/dev/null | cut -d ':' -f1 2>/dev/null);
+export EFI_SYS=$(blkid 2>/dev/null | grep -m1 'PARTLABEL="EFI system partition"' 2>/dev/null | cut -d ':' -f1 2>/dev/null)
 fi
 
 # Prompt the user for the EFI system partition.
 if test -z $EFI_SYS; then
-echo "warning: EFI system partition not found.";
-read -p "Please specify the path of the EFI system partition (e.g. /dev/sda1): " EFI_SYS;
+echo "warning: EFI system partition not found."
+read -p "Please specify the path of the EFI system partition (e.g. /dev/sda1): " EFI_SYS
 fi
 
 # Check if the user told us anything about the partition.
@@ -19,9 +19,9 @@ fi
 mkdir -p /media/EFI_SYS 2>/dev/null
 mount $EFI_SYS /media/EFI_SYS 2>/dev/null
 if [ $? -ne 0 ]; then
-echo "error: unable to mount $EFI_SYS.";
-rmdir /media/EFI_SYS;
-exit 1;
+echo "error: unable to mount $EFI_SYS."
+rmdir /media/EFI_SYS 2>/dev/null
+exit 1
 fi
 
 # Ask GRUB for some necessary details to put into the menu entry.
@@ -30,10 +30,10 @@ export FS_UUID= $(grub-probe --target=fs_uuid /media/EFI_SYS/EFI/Microsoft/Boot/
 
 # Make sure we have got those details.
 if test -z $HINTS_STRING || test -z $FS_UUID; then
-echo "error: is grub-probe installed?";
-umount /media/EFI_SYS
-rmdir /media/EFI_SYS
-exit 1;
+echo "error: is grub-probe installed?"
+umount /media/EFI_SYS 2>/dev/null
+rmdir /media/EFI_SYS 2>/dev/null
+exit 1
 fi
 
 # Write the menu entry.
@@ -49,6 +49,6 @@ menuentry "Microsoft Windows Vista/7/8/8.1" {
 __EOF__
 
 # Clean up.
-umount /media/EFI_SYS
-rmdir /media/EFI_SYS
+umount /media/EFI_SYS 2>/dev/null
+rmdir /media/EFI_SYS 2>/dev/null
 

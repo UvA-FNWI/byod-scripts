@@ -1,31 +1,31 @@
 # Attempt to find the system reserved partition.
 if test -z $SYS_RESERVED; then
-export SYS_RESERVED=$(blkid 2>/dev/null | grep -m1 'LABEL="SYSTEM RESERVED"' 2>/dev/null | cut -d ':' -f1 2>/dev/null);
+export SYS_RESERVED=$(blkid 2>/dev/null | grep -m1 'LABEL="SYSTEM RESERVED"' 2>/dev/null | cut -d ':' -f1 2>/dev/null)
 fi
 
 if test -z $SYS_RESERVED; then
-export SYS_RESERVED=$(blkid 2>/dev/null | grep -m1 'LABEL="SYSTEM"' 2>/dev/null | cut -d ':' -f1 2>/dev/null);
+export SYS_RESERVED=$(blkid 2>/dev/null | grep -m1 'LABEL="SYSTEM"' 2>/dev/null | cut -d ':' -f1 2>/dev/null)
 fi
 
 # Prompt the user for the system reserved partition.
 if test -z $SYS_RESERVED; then
 echo "warning: system reserved partition not found.";
-read -p "Please specify the path of the system reserved partition (e.g. /dev/sda1): " SYS_RESERVED;
+read -p "Please specify the path of the system reserved partition (e.g. /dev/sda1): " SYS_RESERVED
 fi
 
 # Check if the user told us anything about the partition.
 if test -z $SYS_RESERVED; then
 echo "error: system reserved partition not known."
-exit 1;
+exit 1
 fi
 
 # Attempt to mount the partition.
 mkdir -p /media/SYSTEM_RESERVED 2>/dev/null
 mount $SYS_RESERVED /media/SYSTEM_RESERVED 2>/dev/null
 if [ $? -ne 0 ]; then
-echo "error: unable to mount $SYS_RESERVED.";
-rmdir /media/SYSTEM_RESERVED;
-exit 1;
+echo "error: unable to mount $SYS_RESERVED."
+rmdir /media/SYSTEM_RESERVED 2>/dev/null
+exit 1
 fi
 
 # Ask GRUB for some necessary details to put into the menu entry.
@@ -35,9 +35,9 @@ export FS_UUID= $(grub-probe --target=fs_uuid /media/SYSTEM_RESERVED/bootmgr 2>/
 # Make sure we have got those details.
 if test -z $HINTS_STRING || test -z $FS_UUID; then
 echo "error: is grub-probe installed?";
-umount /media/SYSTEM_RESERVED
-rmdir /media/SYSTEM_RESERVED
-exit 1;
+umount /media/SYSTEM_RESERVED 2>/dev/null
+rmdir /media/SYSTEM_RESERVED 2>/dev/null
+exit 1
 fi
 
 # Write the menu entry.
@@ -53,6 +53,6 @@ menuentry "Microsoft Windows Vista/7/8/8.1" {
 __EOF__
 
 # Clean up.
-umount /media/SYSTEM_RESERVED
-rmdir /media/SYSTEM_RESERVED
+umount /media/SYSTEM_RESERVED 2>/dev/null
+rmdir /media/SYSTEM_RESERVED 2>/dev/null
 

@@ -31,8 +31,8 @@ export FS_UUID= $(grub-probe --target=fs_uuid /media/EFI_SYS/EFI/Microsoft/Boot/
 # Make sure we have got those details.
 if test -z $HINTS_STRING || test -z $FS_UUID; then
 echo "error: is grub-probe installed?";
-umount /media/SYSTEM_RESERVED
-rmdir /media/SYSTEM_RESERVED
+umount /media/EFI_SYS
+rmdir /media/EFI_SYS
 exit 1;
 fi
 

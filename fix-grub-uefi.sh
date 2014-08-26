@@ -8,7 +8,7 @@ exit 1
 fi
 
 mkdir -p /media/EFI_SYS
-mount $esp /media/EFI_SYS
+mount $EFI_SYS /media/EFI_SYS
 cat << __EOF__ >> /etc/grub.d/40_custom
 if [ "${grub_platform}" == "pc" ]; then
 	menuentry "Microsoft Windows Vista/7/8/8.1" {
@@ -21,7 +21,7 @@ if [ "${grub_platform}" == "pc" ]; then
 	}
 fi
 __EOF__
-update-grub
+#update-grub
 umount /media/EFI_SYS
 rmdir /media/EFI_SYS
 

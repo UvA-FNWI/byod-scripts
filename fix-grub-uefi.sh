@@ -3,6 +3,9 @@ if test -z $ELOG; then
 export ELOG=/dev/null
 fi
 
+# Truncate the error log.
+>$ELOG
+
 # Attempt to find the EFI system partition.
 if test -z $EFI_SYS; then
 export EFI_SYS=$(blkid 2>>$ELOG | grep -m1 'PARTLABEL="EFI system partition"' 2>>$ELOG | cut -d ':' -f1 2>>$ELOG)

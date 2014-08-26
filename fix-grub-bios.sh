@@ -3,6 +3,9 @@ if test -z $ELOG; then
 export ELOG=/dev/null
 fi
 
+# Truncate the error log.
+>$ELOG
+
 # Attempt to find the system reserved partition.
 if test -z $SYS_RESERVED; then
 export SYS_RESERVED=$(blkid 2>>$ELOG | grep -m1 'LABEL="SYSTEM RESERVED"' 2>>$ELOG | cut -d ':' -f1 2>>$ELOG)

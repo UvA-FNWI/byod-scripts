@@ -1,14 +1,14 @@
 if test -z $SYS_RESERVED; then
-export SYS_RESERVED=$(blkid | grep -m1 'LABEL="SYSTEM RESERVED"' | cut -d ':' -f1);
+export SYS_RESERVED=$(blkid 2>/dev/null | grep -m1 'LABEL="SYSTEM RESERVED"' 2>/dev/null | cut -d ':' -f1 2>/dev/null);
 fi
 
 if test -z $SYS_RESERVED; then
-export SYS_RESERVED=$(blkid | grep -m1 'LABEL="SYSTEM"' | cut -d ':' -f1);
+export SYS_RESERVED=$(blkid 2>/dev/null | grep -m1 'LABEL="SYSTEM"' 2>/dev/null | cut -d ':' -f1 2>/dev/null);
 fi
 
 if test -z $SYS_RESERVED; then
 echo "error: system reserved not found.";
-exit 1
+read -p "Please specify the path of the system reserved partition (e.g. /dev/sda1): " SYS_RESERVED
 fi
 
 mkdir -p /media/SYSTEM_RESERVED

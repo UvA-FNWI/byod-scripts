@@ -27,11 +27,6 @@ fi
 # Attempt to mount the partition.
 mkdir -p /media/SYSTEM_RESERVED 2>$ELOG
 mount $SYS_RESERVED /media/SYSTEM_RESERVED 2>$ELOG
-# For debugging purposes.
-if test -z $ELOG; then
-export ELOG=$ELOG
-fi
-
 if [ $? -ne 0 ]; then
 echo "error: unable to mount $SYS_RESERVED."
 rmdir /media/SYSTEM_RESERVED 2>$ELOG

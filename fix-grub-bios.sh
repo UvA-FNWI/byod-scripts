@@ -1,6 +1,5 @@
 if test -z $SYS_RESERVED; then
-export SYS_RESERVED=$(blkid | grep -m1 'LABEL="SYSTEM RESERVED"' | cut -d
-':' -f1);
+export SYS_RESERVED=$(blkid | grep -m1 'LABEL="SYSTEM RESERVED"' | cut -d ':' -f1);
 fi
 
 if test -z $SYS_RESERVED; then

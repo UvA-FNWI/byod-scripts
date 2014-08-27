@@ -48,8 +48,8 @@ fi
 
 # HP UEFI and various use a hard-coded path. So let's make a copy of bootmgfw,
 # and replace the original with GRUB.
-cp /media/EFI_SYS/EFI/Microsoft/Boot/bootmfgw.efi /media/EFI_SYS/EFI/Microsoft/Boot/bootmfgw-orig.efi
-cp /media/EFI_SYS/EFI/ubuntu/grubx64.efi /media/EFI_SYS/EFI/Microsoft/Boot/bootmfgw.efi
+cp /media/EFI_SYS/EFI/Microsoft/Boot/bootmgfw.efi /media/EFI_SYS/EFI/Microsoft/Boot/bootmgfw-orig.efi
+cp /media/EFI_SYS/EFI/ubuntu/grubx64.efi /media/EFI_SYS/EFI/Microsoft/Boot/bootmgfw.efi
 
 # Write the menu entry.
 cat << __EOF__ >> /etc/grub.d/40_custom

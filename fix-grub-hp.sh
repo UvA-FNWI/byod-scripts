@@ -26,30 +26,30 @@ exit 1;
 fi
 
 # Attempt to mount the partition.
-mkdir -p /media/EFI_SYS 2>>$ELOG
-mount $EFI_SYS /media/EFI_SYS 2>>$ELOG
+mkdir -p /boot/efi 2>>$ELOG
+mount $EFI_SYS /boot/efi 2>>$ELOG
 if [ $? -ne 0 ]; then
 echo "error: unable to mount $EFI_SYS."
-rmdir /media/EFI_SYS 2>>$ELOG
+rmdir /boot/efi 2>>$ELOG
 exit 1
 fi
 
 # Ask GRUB for some necessary details to put into the menu entry.
-export HINTS_STRING=$(grub-probe --target=hints_string /media/EFI_SYS/EFI/Microsoft/Boot/bootmgfw.efi 2>>$ELOG)
-export FS_UUID=$(grub-probe --target=fs_uuid /media/EFI_SYS/EFI/Microsoft/Boot/bootmgfw.efi 2>>$ELOG)
+export HINTS_STRING=$(grub-probe --target=hints_string /boot/efi/EFI/Microsoft/Boot/bootmgfw.efi 2>>$ELOG)
+export FS_UUID=$(grub-probe --target=fs_uuid /boot/efi/EFI/Microsoft/Boot/bootmgfw.efi 2>>$ELOG)
 
 # Make sure we have got those details.
 if test -z "$HINTS_STRING" || test -z "$FS_UUID"; then
 echo "error: is grub-probe installed?"
-umount /media/EFI_SYS 2>>$ELOG
-rmdir /media/EFI_SYS 2>>$ELOG
+umount /boot/efi 2>>$ELOG
+rmdir /boot/efi 2>>$ELOG
 exit 1
 fi
 
 # HP UEFI and various use a hard-coded path. So let's make a copy of bootmgfw,
 # and replace the original with GRUB.
-cp /media/EFI_SYS/EFI/Microsoft/Boot/bootmgfw.efi /media/EFI_SYS/EFI/Microsoft/Boot/bootmgfw-orig.efi
-cp /media/EFI_SYS/EFI/ubuntu/grubx64.efi /media/EFI_SYS/EFI/Microsoft/Boot/bootmgfw.efi
+cp /boot/efi/EFI/Microsoft/Boot/bootmgfw.efi /boot/efi/EFI/Microsoft/Boot/bootmgfw-orig.efi
+cp /boot/efi/EFI/ubuntu/grubx64.efi /boot/efi/EFI/Microsoft/Boot/bootmgfw.efi
 
 # Write the menu entry.
 cat << __EOF__ >> /etc/grub.d/40_custom
@@ -66,6 +66,6 @@ __EOF__
 chmod -x /etc/grub.d/30_os-prober
 
 # Clean up.
-umount /media/EFI_SYS 2>>$ELOG
-rmdir /media/EFI_SYS 2>>$ELOG
+umount /boot/efi 2>>$ELOG
+rmdir /boot/efi 2>>$ELOG
 

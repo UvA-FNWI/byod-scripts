@@ -37,7 +37,7 @@ apt-get -y install oracle-java8-installer oracle-java8-set-default  uvavpn
 apt-get -y install build-essential git vim valgrind flex bison gnuplot graphviz
 
 # Programming languages for the programming-languages course
-apt-get -y install lua5.2 liblua5.2-dev swi-prolog erlang ghc
+apt-get -y install lua5.2 liblua5.2-dev swi-prolog erlang ghc haskell-platform
 
 # Install several python packages
 apt-get -y install python-scipy python-numpy python-matplotlib python3-scipy python3-numpy python3-matplotlib

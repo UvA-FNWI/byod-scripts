@@ -19,7 +19,7 @@ echo "University of Amsterdam - E.M. Kooistra - S.J.R. van Schaik - R. de Vries"
 
 # Install gnome-flashback-session
 echo "[1/8] Installing gnome-flashback-session"
-apt-get -qq install gnome-session-flashback
+apt-get -y install gnome-session-flashback > /dev/null
 gsettings set org.gnome.desktop.wm.keybindings panel-run-dialog "['<Alt>F2']"
 gsettings set org.gnome.desktop.wm.preferences button-layout :minimize,maximize,close
 
@@ -32,29 +32,29 @@ sed -i 's/XSession=ubuntu/Xsession=gnome-fallback/g' /var/lib/AccountsService/us
 echo "[3/8] Installing Java / UvA-VPN"
 add-apt-repository -y ppa:webupd8team/java 2> /dev/null > /dev/null
 add-apt-repository -y ppa:uva-informatica/uvavpn 2> /dev/null > /dev/null
-apt-get -qq update
+apt-get -y update  > /dev/null
 echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
-apt-get -qq install oracle-java8-installer oracle-java8-set-default uvavpn
+apt-get -y install oracle-java8-installer oracle-java8-set-default uvavpn > /dev/null
 
 # Install development tools
 echo "[4/8] Installing development tools"
-apt-get -qq install build-essential git vim valgrind flex bison gnuplot graphviz
+apt-get -y install build-essential git vim valgrind flex bison gnuplot graphviz > /dev/null
 
 # Programming languages for the programming-languages course
 echo "[5/8] Installing Prolog, Erlang and Haskell"
-apt-get -qq install swi-prolog erlang ghc haskell-platform
+apt-get -y install swi-prolog erlang ghc haskell-platform > /dev/null
 
 # Install several python packages
 echo "[6/8] Installing several Python packages"
-apt-get -qq install python-scipy python-numpy python-matplotlib python3-scipy python3-numpy python3-matplotlib
+apt-get -y install python-scipy python-numpy python-matplotlib python3-scipy python3-numpy python3-matplotlib > /dev/null
 
 # Install Chromium
 echo "[7/8] Installing Chromium webbrowser"
-apt-get -qq install chromium-browser
+apt-get -y install chromium-browser > /dev/null
 
 # Install LaTeX
 echo "[8/8] Installing LaTeX (this can take up to 45 minutes)"
-apt-get -qq install texlive-full
+apt-get -y install texlive-full  > /dev/null
 
 # Finish and reboot!
 echo "Reboot your computer now"

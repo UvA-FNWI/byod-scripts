@@ -41,8 +41,8 @@ echo "[4/8] Installing development tools"
 apt-get -y install build-essential git vim valgrind flex bison gnuplot graphviz &>> install_extras_log
 
 # Programming languages for the programming-languages course
-echo "[5/8] Installing Prolog, Erlang and Haskell"
-apt-get -y install swi-prolog erlang ghc haskell-platform &>> install_extras_log
+echo "[5/8] Installing Prolog, Erlang, Go and Haskell"
+apt-get -y install swi-prolog erlang ghc golang haskell-platform &>> install_extras_log
 
 # Install several python packages
 echo "[6/8] Installing several Python packages"

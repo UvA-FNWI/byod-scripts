@@ -19,7 +19,7 @@ echo "University of Amsterdam - E.M. Kooistra - S.J.R. van Schaik - R. de Vries"
 
 # Install gnome-flashback-session
 echo "[1/8] Installing gnome-flashback-session"
-apt-get -q=2 -y install gnome-session-flashback
+apt-get -qq install gnome-session-flashback
 gsettings set org.gnome.desktop.wm.keybindings panel-run-dialog "['<Alt>F2']"
 gsettings set org.gnome.desktop.wm.preferences button-layout :minimize,maximize,close
 
@@ -32,29 +32,29 @@ sed -i 's/XSession=ubuntu/Xsession=gnome-fallback/g' /var/lib/AccountsService/us
 echo "[3/8] Installing Java / UvA-VPN"
 add-apt-repository -y ppa:webupd8team/java 2> /dev/null > /dev/null
 add-apt-repository -y ppa:uva-informatica/uvavpn 2> /dev/null > /dev/null
-apt-get -q=2 update
+apt-get -qq update
 echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
-apt-get -y -q=2 install oracle-java8-installer oracle-java8-set-default uvavpn
+apt-get -qq install oracle-java8-installer oracle-java8-set-default uvavpn
 
 # Install development tools
 echo "[4/8] Installing development tools"
-apt-get -y -q=2 install build-essential git vim valgrind flex bison gnuplot graphviz
+apt-get -qq install build-essential git vim valgrind flex bison gnuplot graphviz
 
 # Programming languages for the programming-languages course
 echo "[5/8] Installing Prolog, Erlang and Haskell"
-apt-get -y -q=2 install swi-prolog erlang ghc haskell-platform
+apt-get -qq install swi-prolog erlang ghc haskell-platform
 
 # Install several python packages
 echo "[6/8] Installing several Python packages"
-apt-get -y -q=2 install python-scipy python-numpy python-matplotlib python3-scipy python3-numpy python3-matplotlib
+apt-get -qq install python-scipy python-numpy python-matplotlib python3-scipy python3-numpy python3-matplotlib
 
 # Install Chromium
 echo "[7/8] Installing Chromium webbrowser"
-apt-get -y -q=2 install chromium-browser
+apt-get -qq install chromium-browser
 
 # Install LaTeX
 echo "[8/8] Installing LaTeX (this can take up to 45 minutes)"
-apt-get -y -q=2 install texlive-full
+apt-get -qq install texlive-full
 
 # Finish and reboot!
 echo "Reboot your computer now"

@@ -15,7 +15,7 @@ if [[ $SUDO_UID -eq 0 ]]; then
    exit 1
 fi
 
-echo "University of Amsterdam - S.J.R. van Schaik - R. de Vries"
+echo "University of Amsterdam - E.M. Kooistra - S.J.R. van Schaik - R. de Vries"
 
 # Install gnome-flashback-session
 apt-get -y install gnome-session-flashback
@@ -37,7 +37,7 @@ apt-get -y install oracle-java8-installer oracle-java8-set-default  uvavpn
 apt-get -y install build-essential git vim valgrind flex bison gnuplot graphviz
 
 # Programming languages for the programming-languages course
-apt-get -y install lua5.2 liblua5.2-dev swi-prolog erlang ghc haskell-platform
+apt-get -y install swi-prolog erlang ghc haskell-platform
 
 # Install several python packages
 apt-get -y install python-scipy python-numpy python-matplotlib python3-scipy python3-numpy python3-matplotlib

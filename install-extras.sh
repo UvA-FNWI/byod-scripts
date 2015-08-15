@@ -19,7 +19,7 @@ echo "University of Amsterdam - E.M. Kooistra - S.J.R. van Schaik - R. de Vries"
 
 # Install gnome-flashback-session
 echo "[1/8] Installing gnome-flashback-session"
-apt-get -y install gnome-session-flashback > /dev/null
+apt-get -y install gnome-session-flashback  &>> install_extras_log
 gsettings set org.gnome.desktop.wm.keybindings panel-run-dialog "['<Alt>F2']"
 gsettings set org.gnome.desktop.wm.preferences button-layout :minimize,maximize,close
 
@@ -30,31 +30,31 @@ sed -i 's/XSession=ubuntu/Xsession=gnome-fallback/g' /var/lib/AccountsService/us
 
 # Install oracle java and UvAvpn
 echo "[3/8] Installing Java / UvA-VPN"
-add-apt-repository -y ppa:webupd8team/java 2> /dev/null > /dev/null
-add-apt-repository -y ppa:uva-informatica/uvavpn 2> /dev/null > /dev/null
-apt-get -y update  > /dev/null
+add-apt-repository -y ppa:webupd8team/java &>> install_extras_log
+add-apt-repository -y ppa:uva-informatica/uvavpn &>> install_extras_log
+apt-get -y update &>> install_extras_log
 echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
-apt-get -y install oracle-java8-installer oracle-java8-set-default uvavpn > /dev/null
+apt-get -y install oracle-java8-installer oracle-java8-set-default uvavpn &>> install_extras_log
 
 # Install development tools
 echo "[4/8] Installing development tools"
-apt-get -y install build-essential git vim valgrind flex bison gnuplot graphviz > /dev/null
+apt-get -y install build-essential git vim valgrind flex bison gnuplot graphviz &>> install_extras_log
 
 # Programming languages for the programming-languages course
 echo "[5/8] Installing Prolog, Erlang and Haskell"
-apt-get -y install swi-prolog erlang ghc haskell-platform > /dev/null
+apt-get -y install swi-prolog erlang ghc haskell-platform &>> install_extras_log
 
 # Install several python packages
 echo "[6/8] Installing several Python packages"
-apt-get -y install python-scipy python-numpy python-matplotlib python3-scipy python3-numpy python3-matplotlib > /dev/null
+apt-get -y install python-scipy python-numpy python-matplotlib python3-scipy python3-numpy python3-matplotlib &>> install_extras_log
 
 # Install Chromium
 echo "[7/8] Installing Chromium webbrowser"
-apt-get -y install chromium-browser > /dev/null
+apt-get -y install chromium-browser &>> install_extras_log
 
 # Install LaTeX
 echo "[8/8] Installing LaTeX (this can take up to 45 minutes)"
-apt-get -y install texlive-full  > /dev/null
+apt-get -y install texlive-full &>> install_extras_log
 
 # Finish and reboot!
 echo "Reboot your computer now"

@@ -38,7 +38,7 @@ apt-get -y install oracle-java8-installer oracle-java8-set-default uvavpn &>> in
 
 # Install development tools
 echo "[4/9] Installing development tools"
-apt-get -y install build-essential git vim valgrind flex bison gnuplot graphviz &>> install_extras_log
+apt-get -y install build-essential git vim valgrind flex bison gnuplot gnuplot-qt graphviz &>> install_extras_log
 
 # Programming languages for the programming-languages course
 echo "[5/9] Installing Prolog, Erlang, Go and Haskell"

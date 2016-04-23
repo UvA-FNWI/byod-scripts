@@ -15,6 +15,12 @@ if [[ $SUDO_UID -eq 0 ]]; then
    exit 1
 fi
 
+
+if ! `lsb_release -c | grep -q trusty`; then
+    echo "This script can only be executed on a machine running Ubuntu 14.04 LTS"
+    exit 1
+fi
+
 echo "University of Amsterdam - E.M. Kooistra - S.J.R. van Schaik - R. de Vries"
 
 # Install gnome-flashback-session

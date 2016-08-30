@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+CREATE_PAV_DOWNLOAD="https://gitlab-fnwi.uva.nl/informatica/LaTeX-template/repository/archive.tar.gz?ref=master"
 
 if [[ $EUID -ne 0 ]]; then
     echo "This program must be run as root, try: sudo ./install-extras.sh" 1>&2
@@ -61,6 +62,19 @@ apt-get -y install chromium-browser &>> install_extras_log
 # Install LaTeX
 echo "[7/9] Installing LaTeX (this can take up to 45 minutes)"
 apt-get -y install texlive-full &>> install_extras_log
+# Make sure we are creating a new directory.
+if ( ! [[ -a "/tmp/createpav" ]] ) && mkdir "/tmp/createpav" &>> install_extras_log; then
+    CUR_PATH="$(pwd)"
+    cd /tmp;
+    outfile="$(tempfile)"
+    wget -O "$outfile" "$CREATE_PAV_DOWNLOAD" &>> "$CUR_PATH/install_extras_log"
+    tar xfz "$outfile" -C createpav  &>> "$CUR_PATH/install_extras_log"
+    cd ./createpav/*
+    make install &>> "$CUR_PATH/install_extras_log"
+    cd "$CUR_PATH"
+else
+    echo "/tmp/createpav directory did already exist. Not installing pav" >> install_extras_log
+fi
 
 #check for updates
 echo "[8/9] Updating packages"

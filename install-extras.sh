@@ -35,13 +35,18 @@ sed -i 's/user-session=ubuntu/user-session=gnome-flashback-compiz/g' /usr/share/
 sed -i 's/XSession=ubuntu/Xsession=gnome-flashback-compiz/g' /var/lib/AccountsService/users/$SUDO_USER
 
 # Install oracle java and UvAvpn
-echo "[2/9] Installing Java / UvA-VPN / Atom"
+echo "[2/9] Installing Java / UvA-VPN / Atom / SIM-PL"
 add-apt-repository -y ppa:webupd8team/java &>> install_extras_log
 add-apt-repository -y ppa:webupd8team/atom &>> install_extras_log
 add-apt-repository -y ppa:uva-informatica/uvavpn &>> install_extras_log
 apt-get -y update &>> install_extras_log
 echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
 apt-get -y install oracle-java8-installer oracle-java8-set-default uvavpn atom &>> install_extras_log
+
+# Install sim-pl
+add-apt-repository ppa:uva-informatica/sim-pl &>> install_extras_log
+apt-get -y update &>> install_extras_log
+apt-get -y install sim-pl &>> install_extras_log
 
 # Install development tools
 echo "[3/9] Installing development tools"

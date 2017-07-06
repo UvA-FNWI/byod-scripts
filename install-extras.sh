@@ -44,7 +44,7 @@ echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | su
 apt-get -y install oracle-java8-installer oracle-java8-set-default uvavpn atom &>> install_extras_log
 
 # Install sim-pl
-add-apt-repository ppa:uva-informatica/sim-pl &>> install_extras_log
+add-apt-repository -y ppa:uva-informatica/sim-pl &>> install_extras_log
 apt-get -y update &>> install_extras_log
 apt-get -y install sim-pl &>> install_extras_log
 

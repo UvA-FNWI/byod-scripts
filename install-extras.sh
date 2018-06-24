@@ -28,7 +28,7 @@ Made by:
  - E.M. Kooistra
  - S.J.R. van Schaik
  - R. de Vries
- - L. van Hijfte
+ - L.A. van Hijfte
  - S. van den Broek
  "
 red=`tput setaf 1`
@@ -52,15 +52,15 @@ function check_answer {
 
 function install_app {
     app=$1
-    echo -ne "Installing ${app%;*}..."
+    echo -ne "$2 Installing ${app%;*}..."
     ${app#*;} &> install_extras_log
     if [[ $? -ne 0 ]]; then
-        echo -e "\r${red}Something went wrong when installing ${app%;*}.${reset}"
+        echo -e "\r$2 ${red}Something went wrong when installing ${app%;*}.${reset}"
         if check_answer "Would you like to read the log file?"; then
             less install_extras_log
         fi
     else
-        echo -e "\r${green}Installed ${app%;*}${reset}    "
+        echo -e "\r$2 ${green}Installed ${app%;*}${reset}    "
     fi
 }
 
@@ -125,18 +125,18 @@ optional=("Chromium;install_chromium")
 echo -ne "Initializing..."
 initialize &> install_extras_log
 echo -e "\rInstalling packages..."
-for m in "${mandatory[@]}"; do
-    install_app $m
-done
 
-for r in "${recommended[@]}"; do
-    if check_answer "Would you like to install ${r%;*} (recommended)?"; then
-        install_app $r
+total=$(( ${#mandatory[@]} + ${#recommended[@]} + ${#optional[@]} ))
+for ((i=0; i < ${#mandatory[@]}; i++)) do
+    install_app ${mandatory[$i]} "[$((i + 1))/$total]"
+done
+for ((i=0; i < ${#recommended[@]}; i++)) do
+    if check_answer "Would you like to install ${recommended[$i]%;*} (recommended)?"; then
+        install_app ${recommended[$i]} "[$((i + ${#mandatory[@]} + 1))/$total]"
     fi
 done
-
-for r in "${optional[@]}"; do
-    if check_answer "Would you like to install ${r%;*} (optional)?"; then
-        install_app $r
+for ((i=0; i < ${#optional[@]}; i++)) do
+    if check_answer "Would you like to install ${optional[$i]%;*} (optional)?"; then
+        install_app ${optional[$i]} "[$((i + ${#mandatory[@]} + ${#recommended[@]} + 1))/$total]"
     fi
 done

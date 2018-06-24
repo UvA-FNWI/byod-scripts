@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+tput reset
 
 if [[ $EUID -ne 0 ]]; then
     echo "This program must be run as root, try: sudo ./install-extras.sh" 1>&2
@@ -15,51 +16,127 @@ if [[ $SUDO_UID -eq 0 ]]; then
    exit 1
 fi
 
-if ! `lsb_release -c | grep -q xenial`; then
-    echo "This script can only be executed on a machine running Ubuntu 16.04 LTS"
-    exit 1
+if ! `lsb_release -c | grep -q bionic`; then
+    echo "This script is recommended to be executed on a machine running Ubuntu 18.04 LTS"
+    if ! check_answer "Do you wish to continue?"; then exit 1; fi
 fi
 
-echo "University of Amsterdam - E.M. Kooistra - S.J.R. van Schaik - R. de Vries"
+echo "Installation script
+University of Amsterdam
 
-# Install gnome-flashback-session
-echo "[0/7] Installing gnome-flashback-session"
-apt-get -y install gnome-session-flashback  &>> install_extras_log
-gsettings set org.gnome.desktop.wm.keybindings panel-run-dialog "['<Alt>F2']"
-gsettings set org.gnome.desktop.wm.preferences button-layout :minimize,maximize,close
+Made by:
+ - E.M. Kooistra
+ - S.J.R. van Schaik
+ - R. de Vries
+ - L. van Hijfte
+ - S. van den Broek
+ "
+red=`tput setaf 1`
+green=`tput setaf 2`
+reset=`tput sgr0`
 
-# Set gnome-session-flashback as default
-echo "[1/7] Setting gnome-session-flashback as default"
-sed -i 's/user-session=ubuntu/user-session=gnome-flashback-compiz/g' /usr/share/lightdm/lightdm.conf.d/50-ubuntu.conf
-sed -i 's/XSession=ubuntu/XSession=gnome-flashback-compiz/g' /var/lib/AccountsService/users/$SUDO_USER
+function aset {
+    ${1#*,}
+}
 
-# Install oracle java and UvAvpn
-echo "[2/7] Installing Java / UvA-VPN / Atom / SIM-PL"
-add-apt-repository -y ppa:webupd8team/java &>> install_extras_log
-add-apt-repository -y ppa:webupd8team/atom &>> install_extras_log
-add-apt-repository -y ppa:uva-informatica/meta-packages &>> install_extras_log
-add-apt-repository -y ppa:uva-informatica/sim-pl &>> install_extras_log
-add-apt-repository -y ppa:uva-informatica/uvavpn &>> install_extras_log
-apt-get -y update &>> install_extras_log
+function check_answer {
+    while true; do
+        read -p "$1 (Y/n) " answer
+        case $answer in
+            [Yy]* ) return 0;;
+            [Nn]* ) return 1;;
+            * ) echo "Pleases answer yes (y) or no (n)";;
+        esac
+    done
+}
 
-echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
-apt-get -y install oracle-java8-installer oracle-java8-set-default uvavpn atom sim-pl&>> install_extras_log
+function install_app {
+    app=$1
+    echo -ne "Installing ${app%;*}..."
+    ${app#*;} &> install_extras_log
+    if [[ $? -ne 0 ]]; then
+        echo -e "\r${red}Something went wrong when installing ${app%;*}.${reset}"
+        if check_answer "Would you like to read the log file?"; then
+            less install_extras_log
+        fi
+    else
+        echo -e "\r${green}Installed ${app%;*}${reset}    "
+    fi
+}
 
-# Install development tools
-echo "[3/7] Installing packages for courses"
-apt-get -y install informatica-common informatica-jaar-1 &>> install_extras_log
+function initialize {
+    # Add repositories
+    add-apt-repository -y ppa:uva-informatica/meta-packages &&
+    add-apt-repository -y ppa:webupd8team/java &&
+    add-apt-repository -y ppa:uva-informatica/sim-pl &&
+    add-apt-repository -y ppa:uva-informatica/uvavpn &&
+    # Load repositories
+    apt -y update &&
+    # Configuring java
+    echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
+}
 
-# Install several python packages
-echo "[4/7] Installing several Python packages"
-apt-get -y install python-scipy python-numpy python-matplotlib python3-scipy python3-numpy python3-matplotlib &>> install_extras_log
+# Mandatory
+function install_java {
+    apt -y install oracle-java8-installer &&
+    apt -y install oracle-java8-set-default
+}
+function install_simpl {
+    apt -y install sim-pl
+}
+function install_uvavpn {
+    apt -y install uvavpn
+}
+function install_uva_packages {
+    apt -y install informatica-common informatica-jaar-1
+}
+function install_python {
+    apt -y install python-scipy python-numpy python-matplotlib python3-scipy python3-numpy python3-matplotlib
+}
+function upgrade {
+    apt -y upgrade
+}
 
-# Install Chromium
-echo "[5/7] Installing Chromium webbrowser"
-apt-get -y install chromium-browser &>> install_extras_log
+# Recommended
+function install_atom {
+    # Add repositories
+    add-apt-repository -y ppa:webupd8team/atom &&
+    # Load repositoriy
+    apt -y update &&
+    # Install atom
+    apt -y install atom
+}
 
-#check for updates
-echo "[6/7] Updating packages"
-apt-get -y upgrade &>> install_extras_log
+# Additional
+function install_chromium {
+    apt -y install chromium-browser
+}
 
-# Finish and reboot!
-echo "[7/7] Finished, reboot your computer now"
+mandatory=("Java;install_java"
+           "SIM-PL;install_simpl"
+           "UvA-VPN;install_uvavpn"
+           "UvA-packages;install_uva_packages"
+           "Python-packages;install_python")
+
+recommended=("Atom;install_atom")
+
+optional=("Chromium;install_chromium")
+
+echo -ne "Initializing..."
+initialize &> install_extras_log
+echo -e "\rInstalling packages..."
+for m in "${mandatory[@]}"; do
+    install_app $m
+done
+
+for r in "${recommended[@]}"; do
+    if check_answer "Would you like to install ${r%;*} (recommended)?"; then
+        install_app $r
+    fi
+done
+
+for r in "${optional[@]}"; do
+    if check_answer "Would you like to install ${r%;*} (optional)?"; then
+        install_app $r
+    fi
+done

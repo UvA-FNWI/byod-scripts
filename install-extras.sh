@@ -32,13 +32,12 @@ Made by:
  - S.J.N. van den Broek
  "
 
-red=`tput setaf 1`
-green=`tput setaf 2`
-reset=`tput sgr0`
-
-function aset {
-    ${1#*,}
-}
+# Sets colors if supported else they are empty.
+if [ $(bc <<< "`(tput colors) 2>/dev/null || echo 0` >= 8") -eq 1 ]; then
+    red=`tput setaf 1`
+    green=`tput setaf 2`
+    reset=`tput sgr0`
+fi
 
 function check_answer {
     while true; do
@@ -112,6 +111,11 @@ function install_atom {
 function install_chromium {
     apt -y install chromium-browser
 }
+function install_zsh {
+    apt -y install zsh &&
+    sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)" &&
+    sudo -u $USERNAME chsh -s $(which zsh)
+}
 
 mandatory=("Java;install_java"
            "SIM-PL;install_simpl"
@@ -121,7 +125,8 @@ mandatory=("Java;install_java"
 
 recommended=("Atom;install_atom")
 
-optional=("Chromium;install_chromium")
+optional=("Chromium;install_chromium"
+          "Oh-My-Zsh;install_zsh")
 
 echo -ne "Initializing..."
 initialize &> install_extras_log
@@ -144,4 +149,4 @@ for ((i=0; i < ${#optional[@]}; i++)) do
     fi
 done
 
-echo "Finished, reboot your computer now"
+echo "Finished, if nothing went wrong reboot your computer."

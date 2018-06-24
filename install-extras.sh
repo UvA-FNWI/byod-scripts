@@ -31,6 +31,7 @@ Made by:
  - L.A. van Hijfte
  - S.J.N. van den Broek
  "
+
 red=`tput setaf 1`
 green=`tput setaf 2`
 reset=`tput sgr0`
@@ -142,3 +143,5 @@ for ((i=0; i < ${#optional[@]}; i++)) do
         install_app ${optional[$i]} $tag
     fi
 done
+
+echo "Finished, reboot your computer now"

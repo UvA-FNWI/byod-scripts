@@ -29,7 +29,7 @@ Made by:
  - S.J.R. van Schaik
  - R. de Vries
  - L.A. van Hijfte
- - S. van den Broek
+ - S.J.N. van den Broek
  "
 red=`tput setaf 1`
 green=`tput setaf 2`
@@ -131,12 +131,14 @@ for ((i=0; i < ${#mandatory[@]}; i++)) do
     install_app ${mandatory[$i]} "[$((i + 1))/$total]"
 done
 for ((i=0; i < ${#recommended[@]}; i++)) do
-    if check_answer "Would you like to install ${recommended[$i]%;*} (recommended)?"; then
-        install_app ${recommended[$i]} "[$((i + ${#mandatory[@]} + 1))/$total]"
+    tag=[$((i + ${#mandatory[@]} + 1))/$total]
+    if check_answer "$tag Would you like to install ${recommended[$i]%;*} (recommended)?"; then
+        install_app ${recommended[$i]} $tag
     fi
 done
 for ((i=0; i < ${#optional[@]}; i++)) do
-    if check_answer "Would you like to install ${optional[$i]%;*} (optional)?"; then
-        install_app ${optional[$i]} "[$((i + ${#mandatory[@]} + ${#recommended[@]} + 1))/$total]"
+    tag=[$((i + ${#mandatory[@]} + ${#recommended[@]} + 1))/$total]
+    if check_answer "$tag Would you like to install ${optional[$i]%;*} (optional)?"; then
+        install_app ${optional[$i]} $tag
     fi
 done

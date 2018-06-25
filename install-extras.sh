@@ -48,17 +48,34 @@ distro=$(lsb_release -c)
 distro=${distro##*:}
 distro=${distro:1}
 
+#TODO -y bij de rest
 case `uname` in
     Linux )
         # Debian, Ubuntu
-        which apt && { prefix="apt"; return; }
+        which apt && { install="apt install -y";
+                       add_repo="add-apt-repository -y";
+                       upgrade="apt upgrade -y";
+                       return; }
         # Fedora, CentOS
-        which yum && { prefix="yum"; return; }
-        which dnf && { prefix="dnf"; return; }
+        which yum && { install="yum install";
+                       add_repo="[add_repo]";
+                       upgrade="[upgrade]";
+                       return; }
+        which dnf && { install="[install]";
+                       #TODO Is `dnf config-manager --set-enabled` required?
+                       add_repo="dnf config-manager --add-repo";
+                       upgrade="[upgrade]";
+                       return; }
         # OpenSUSE
-        which zypper && { prefix="zypper"; return; }
+        which zypper && { install="[install]";
+                          add_repo="[add_repo]";
+                          upgrade="[upgrade]";
+                          return; }
         # Arch Linux
-        which pacman && { prefix="pacman"; return; }
+        which pacman && { install="[install]";
+                          add_repo="[add_repo]";
+                          upgrade="pacman -Sy";
+                          return; }
         ;;
     * )
         if [ -z "$1" ]; then
@@ -66,7 +83,9 @@ case `uname` in
             echo "restart the script with ./$0 manual"
             exit 1
         fi
-        prefix="[prefix]"
+        install="[install]"
+        add_repo="[add_repo]"
+        upgrade="[upgrade]"
         ;;
 esac
 
@@ -159,8 +178,8 @@ function install_python {
 function install_python_extra {
     apt -y install python  python-pip  python-virtualenv
     apt -y install python3 python3-pip python3-virtualenv
-    su $SUDO_USER -c "source ~/envPython2.7/bin/activate; pip install numpy nltk matplotlib pillow; deactivate" &>> ${LOGFILE}
-    su $SUDO_USER -c "source ~/envPython3/bin/activate; pip install numpy nltk matplotlib pillow; deactivate" &>> ${LOGFILE}
+    su $SUDO_USER -c "source ~/envPython2.7/bin/activate; pip install numpy scipy nltk matplotlib pillow; deactivate" &>> ${LOGFILE}
+    su $SUDO_USER -c "source ~/envPython3/bin/activate; pip install numpy scipy nltk matplotlib pillow; deactivate" &>> ${LOGFILE}
 }
 
 function install_zsh {
@@ -222,7 +241,7 @@ while true; do
                 "SIM-PL;apt -y install sim-pl"
                 "UvA-VPN;apt -y install uvavpn"
                 "UvA packages;apt -y install informatica-common informatica-jaar-1"
-                "Python libraries;apt -y install python-scipy python-numpy python-matplotlib python3-scipy python3-numpy python3-matplotlib")
+                "Python libraries;install_python_extra")
             recommended=(
                 "Atom;install_atom"
                 "LaTeX;apt -y install texlive-full"

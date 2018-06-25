@@ -47,6 +47,8 @@ python3-virtualenv is already the newest version (15.1.0+ds-1.1).
 python3-pip is already the newest version (9.0.1-2.3~ubuntu1).
 0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
 Requirement already satisfied: numpy in /home/polo/envPython2.7/lib/python2.7/site-packages (1.14.5)
+Collecting scipy
+  Downloading https://files.pythonhosted.org/packages/2a/f3/de9c1bd16311982711209edaa8c6caa962db30ebb6a8cc6f1dcd2d3ef616/scipy-1.1.0-cp27-cp27mu-manylinux1_x86_64.whl (30.8MB)
 Requirement already satisfied: nltk in /home/polo/envPython2.7/lib/python2.7/site-packages (3.3)
 Requirement already satisfied: matplotlib in /home/polo/envPython2.7/lib/python2.7/site-packages (2.2.2)
 Requirement already satisfied: pillow in /home/polo/envPython2.7/lib/python2.7/site-packages (5.1.0)
@@ -59,17 +61,24 @@ Requirement already satisfied: pytz in /home/polo/envPython2.7/lib/python2.7/sit
 Requirement already satisfied: python-dateutil>=2.1 in /home/polo/envPython2.7/lib/python2.7/site-packages (from matplotlib) (2.7.3)
 Requirement already satisfied: pyparsing!=2.0.4,!=2.1.2,!=2.1.6,>=2.0.1 in /home/polo/envPython2.7/lib/python2.7/site-packages (from matplotlib) (2.2.0)
 Requirement already satisfied: setuptools in /home/polo/envPython2.7/lib/python2.7/site-packages (from kiwisolver>=1.0.1->matplotlib) (39.2.0)
+Installing collected packages: scipy
+Successfully installed scipy-1.1.0
 Requirement already satisfied: numpy in /home/polo/envPython3/lib/python3.6/site-packages (1.14.5)
+Collecting scipy
+  Cache entry deserialization failed, entry ignored
+  Downloading https://files.pythonhosted.org/packages/a8/0b/f163da98d3a01b3e0ef1cab8dd2123c34aee2bafbb1c5bffa354cc8a1730/scipy-1.1.0-cp36-cp36m-manylinux1_x86_64.whl (31.2MB)
 Requirement already satisfied: nltk in /home/polo/envPython3/lib/python3.6/site-packages (3.3)
 Requirement already satisfied: matplotlib in /home/polo/envPython3/lib/python3.6/site-packages (2.2.2)
 Requirement already satisfied: pillow in /home/polo/envPython3/lib/python3.6/site-packages (5.1.0)
 Requirement already satisfied: six in /home/polo/envPython3/lib/python3.6/site-packages (from nltk) (1.11.0)
-Requirement already satisfied: cycler>=0.10 in /home/polo/envPython3/lib/python3.6/site-packages (from matplotlib) (0.10.0)
 Requirement already satisfied: pyparsing!=2.0.4,!=2.1.2,!=2.1.6,>=2.0.1 in /home/polo/envPython3/lib/python3.6/site-packages (from matplotlib) (2.2.0)
-Requirement already satisfied: kiwisolver>=1.0.1 in /home/polo/envPython3/lib/python3.6/site-packages (from matplotlib) (1.0.1)
 Requirement already satisfied: pytz in /home/polo/envPython3/lib/python3.6/site-packages (from matplotlib) (2018.4)
+Requirement already satisfied: kiwisolver>=1.0.1 in /home/polo/envPython3/lib/python3.6/site-packages (from matplotlib) (1.0.1)
 Requirement already satisfied: python-dateutil>=2.1 in /home/polo/envPython3/lib/python3.6/site-packages (from matplotlib) (2.7.3)
+Requirement already satisfied: cycler>=0.10 in /home/polo/envPython3/lib/python3.6/site-packages (from matplotlib) (0.10.0)
 Requirement already satisfied: setuptools in /home/polo/envPython3/lib/python3.6/site-packages (from kiwisolver>=1.0.1->matplotlib) (39.2.0)
+Installing collected packages: scipy
+Successfully installed scipy-1.1.0
 
 
 
@@ -79,3 +88,137 @@ INSTALLING SQL
 #############################################
 #############################################
 
+Reading package lists...
+Building dependency tree...
+Reading state information...
+mysql-server is already the newest version (5.7.22-0ubuntu18.04.1).
+0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+ERROR 1396 (HY000) at line 1: Operation DROP USER failed for 'root'@'localhost'
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+libsqlite0-dev is already the newest version (2.8.17-14fakesync1).
+sqlite is already the newest version (2.8.17-14fakesync1).
+mysql-client is already the newest version (5.7.22-0ubuntu18.04.1).
+0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+
+
+
+#############################################
+#############################################
+INSTALLING Java
+#############################################
+#############################################
+
+Get:1 http://security.ubuntu.com/ubuntu bionic-security InRelease [83.2 kB]
+Hit:2 http://ppa.launchpad.net/marutter/rrutter/ubuntu bionic InRelease
+Hit:3 http://gb.archive.ubuntu.com/ubuntu bionic InRelease
+Hit:4 http://ppa.launchpad.net/webupd8team/atom/ubuntu bionic InRelease
+Get:5 http://gb.archive.ubuntu.com/ubuntu bionic-updates InRelease [83.2 kB]
+Hit:6 https://cran.rstudio.com/bin/linux/ubuntu xenial/ InRelease
+Hit:7 http://ppa.launchpad.net/webupd8team/java/ubuntu bionic InRelease
+Get:8 http://gb.archive.ubuntu.com/ubuntu bionic-backports InRelease [74.6 kB]
+Ign:9 https://cran.rstudio.com/bin/linux/ubuntu bionic/ InRelease
+Ign:10 https://cran.rstudio.com/bin/linux/ubuntu  InRelease
+Err:11 https://cran.rstudio.com/bin/linux/ubuntu bionic/ Release
+  404  Not Found [IP: 54.192.130.248 443]
+Err:12 https://cran.rstudio.com/bin/linux/ubuntu  Release
+  404  Not Found [IP: 54.192.130.248 443]
+Reading package lists...
+E: The repository 'https://cran.rstudio.com/bin/linux/ubuntu bionic/ Release' does not have a Release file.
+E: The repository 'https://cran.rstudio.com/bin/linux/ubuntu  Release' does not have a Release file.
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+Hit:1 http://gb.archive.ubuntu.com/ubuntu bionic InRelease
+Get:2 http://security.ubuntu.com/ubuntu bionic-security InRelease [83.2 kB]
+Hit:3 http://ppa.launchpad.net/marutter/rrutter/ubuntu bionic InRelease
+Hit:4 https://cran.rstudio.com/bin/linux/ubuntu xenial/ InRelease
+Get:5 http://gb.archive.ubuntu.com/ubuntu bionic-updates InRelease [83.2 kB]
+Ign:6 https://cran.rstudio.com/bin/linux/ubuntu bionic/ InRelease
+Ign:7 https://cran.rstudio.com/bin/linux/ubuntu  InRelease
+Hit:8 http://ppa.launchpad.net/webupd8team/atom/ubuntu bionic InRelease
+Err:9 https://cran.rstudio.com/bin/linux/ubuntu bionic/ Release
+  404  Not Found [IP: 54.192.130.248 443]
+Err:10 https://cran.rstudio.com/bin/linux/ubuntu  Release
+  404  Not Found [IP: 54.192.130.248 443]
+Hit:11 http://ppa.launchpad.net/webupd8team/java/ubuntu bionic InRelease
+Get:12 http://gb.archive.ubuntu.com/ubuntu bionic-backports InRelease [74.6 kB]
+Reading package lists...
+E: The repository 'https://cran.rstudio.com/bin/linux/ubuntu bionic/ Release' does not have a Release file.
+E: The repository 'https://cran.rstudio.com/bin/linux/ubuntu  Release' does not have a Release file.
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+oracle-java8-installer is already the newest version (8u171-1~webupd8~0).
+oracle-java8-set-default is already the newest version (8u171-1~webupd8~0).
+0 upgraded, 0 newly installed, 0 to remove and 0 not upgraded.
+
+
+
+#############################################
+#############################################
+INSTALLING R
+#############################################
+#############################################
+
+Hit:1 http://gb.archive.ubuntu.com/ubuntu bionic InRelease
+Get:2 http://security.ubuntu.com/ubuntu bionic-security InRelease [83.2 kB]
+Hit:3 http://ppa.launchpad.net/marutter/rrutter/ubuntu bionic InRelease
+Get:4 http://gb.archive.ubuntu.com/ubuntu bionic-updates InRelease [83.2 kB]
+Hit:5 https://cran.rstudio.com/bin/linux/ubuntu xenial/ InRelease
+Ign:6 https://cran.rstudio.com/bin/linux/ubuntu bionic/ InRelease
+Ign:7 https://cran.rstudio.com/bin/linux/ubuntu  InRelease
+Hit:8 http://ppa.launchpad.net/webupd8team/atom/ubuntu bionic InRelease
+Err:9 https://cran.rstudio.com/bin/linux/ubuntu bionic/ Release
+  404  Not Found [IP: 54.192.130.248 443]
+Err:10 https://cran.rstudio.com/bin/linux/ubuntu  Release
+  404  Not Found [IP: 54.192.130.248 443]
+Hit:11 http://ppa.launchpad.net/webupd8team/java/ubuntu bionic InRelease
+Get:12 http://gb.archive.ubuntu.com/ubuntu bionic-backports InRelease [74.6 kB]
+Reading package lists...
+E: The repository 'https://cran.rstudio.com/bin/linux/ubuntu bionic/ Release' does not have a Release file.
+E: The repository 'https://cran.rstudio.com/bin/linux/ubuntu  Release' does not have a Release file.
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+Hit:1 http://ppa.launchpad.net/marutter/rrutter/ubuntu bionic InRelease
+Get:2 http://security.ubuntu.com/ubuntu bionic-security InRelease [83.2 kB]
+Hit:3 http://gb.archive.ubuntu.com/ubuntu bionic InRelease
+Hit:4 https://cran.rstudio.com/bin/linux/ubuntu xenial/ InRelease
+Get:5 http://gb.archive.ubuntu.com/ubuntu bionic-updates InRelease [83.2 kB]
+Ign:6 https://cran.rstudio.com/bin/linux/ubuntu bionic/ InRelease
+Hit:7 http://ppa.launchpad.net/webupd8team/atom/ubuntu bionic InRelease
+Ign:8 https://cran.rstudio.com/bin/linux/ubuntu  InRelease
+Err:9 https://cran.rstudio.com/bin/linux/ubuntu bionic/ Release
+  404  Not Found [IP: 54.192.130.248 443]
+Err:10 https://cran.rstudio.com/bin/linux/ubuntu  Release
+  404  Not Found [IP: 54.192.130.248 443]
+Hit:11 http://ppa.launchpad.net/webupd8team/java/ubuntu bionic InRelease
+Get:12 http://gb.archive.ubuntu.com/ubuntu bionic-backports InRelease [74.6 kB]
+Reading package lists...
+E: The repository 'https://cran.rstudio.com/bin/linux/ubuntu bionic/ Release' does not have a Release file.
+E: The repository 'https://cran.rstudio.com/bin/linux/ubuntu  Release' does not have a Release file.
+
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+Reading package lists...
+Building dependency tree...
+Reading state information...
+Some packages could not be installed. This may mean that you have
+requested an impossible situation or if you are using the unstable
+distribution that some required packages have not yet been created
+or been moved out of Incoming.
+The following information may help to resolve the situation:
+
+The following packages have unmet dependencies:
+ r-base : Depends: r-base-core (>= 3.4.4-1xenial0) but it is not going to be installed
+          Depends: r-recommended (= 3.4.4-1xenial0) but it is not going to be installed
+          Recommends: r-base-html but it is not going to be installed
+E: Unable to correct problems, you have held broken packages.

@@ -44,6 +44,16 @@ if ! `lsb_release -c | grep -q bionic`; then
     if ! check_answer "Do you wish to continue?"; then exit 1; fi
 fi
 
+# Sets colors if supported else they are empty.
+if [ $(bc <<< "`(tput colors) 2>/dev/null || echo 0` >= 8") -eq 1 ]; then
+    RED=`tput setaf 1`
+    GREEN=`tput setaf 2`
+    YELLOW=`tput setaf 3`
+    BLUE=`tput setaf 4`
+    BOLD=`tput bold`
+    RESET=`tput sgr0`
+fi
+
 distro=$(lsb_release -c)
 distro=${distro##*:}
 distro=${distro:1}
@@ -59,23 +69,26 @@ case `uname` in
                        upgrade="apt upgrade -y";
                        return; }
         # Fedora, CentOS
+        #TODO not tested.
         which yum && { install="yum install";
                        #TODO Does this require rpm?
                        add_repo="[add_repo]";
                        upgrade="yum upgrade";
                        return; }
+        #TODO not tested.
         which dnf && { install="dnf install";
                        #TODO Is `dnf config-manager --set-enabled` required?
-                       #    only for local files?
                        add_repo="dnf config-manager --add-repo";
                        upgrade="dnf upgrade";
                        return; }
         # OpenSUSE
-        which zypper && { install="[install]";
-                          add_repo="[add_repo]";
-                          upgrade="[upgrade]";
+        #TODO not tested.
+        which zypper && { install="zypper in";
+                          add_repo="zypper addrepo";
+                          upgrade="zypper up";
                           return; }
         # Arch Linux
+        #TODO not tested.
         which pacman && { install="pacman -S";
                           add_repo="pacman -Q";
                           upgrade="pacman -Su";
@@ -84,21 +97,15 @@ case `uname` in
     * )
         if [ -z "$1" ]; then
             echo "It seems that your packed manager is not supported"
-            echo "restart the script with ./$0 manual"
+            echo "edit the lines 104, 105 and 106 to comply with your packed manager"
+            echo "restart the script with \"${BOLD}$0 manual${RESET}\""
             exit 1
         fi
-        install="[install]"
-        add_repo="[add_repo]"
-        upgrade="[upgrade]"
+        install="[package install command]"
+        add_repo="[add repositorie command]"
+        upgrade="[upgrades all packages command]"
         ;;
 esac
-
-# Sets colors if supported else they are empty.
-if [ $(bc <<< "`(tput colors) 2>/dev/null || echo 0` >= 8") -eq 1 ]; then
-    red=`tput setaf 1`
-    green=`tput setaf 2`
-    reset=`tput sgr0`
-fi
 
 tput reset
 echo -e ${TITLE}
@@ -114,17 +121,18 @@ INSTALLING ${app%;*}
 #############################################\n" &>> ${LOGFILE}
     ${app#*;} &>> ${LOGFILE}
     if [[ $? -ne 0 ]]; then
-        echo -e "\r$2 ${red}Something went wrong when installing ${app%;*}.${reset}"
+        echo -e "\r$2 ${RED}Something went wrong when installing ${app%;*}.${RESET}"
         if check_answer "Would you like to read the log file?"; then
             less ${LOGFILE}
         fi
     else
-        echo -e "\r$2 ${green}Installed ${app%;*}${reset}    "
+        echo -e "\r$2 ${GREEN}Installed ${app%;*}${RESET}    "
     fi
 }
 
 function initialize_informatica {
     # Add repositories
+    sudo apt-add-repository universe &&
     # add-apt-repository -y ppa:uva-informatica/meta-packages &&
     # add-apt-repository -y ppa:uva-informatica/sim-pl &&
     # add-apt-repository -y ppa:uva-informatica/uvavpn &&
@@ -133,8 +141,8 @@ function initialize_informatica {
 }
 
 function initialize_AI1 {
-    gsettings set org.gnome.desktop.wm.keybindings panel-run-dialog "['<Alt>F2']"
-    gsettings set org.gnome.desktop.wm.preferences button-layout :minimize,maximize,close
+    gsettings set org.gnome.desktop.wm.keybindings panel-run-dialog "['<Alt>F2']" &&
+    gsettings set org.gnome.desktop.wm.preferences button-layout :minimize,maximize,close &&
 
     su $SUDO_USER -c ' mkdir -p ~/bin;
                        if [ -z "`grep \"BscKI\" ~/.bashrc`" ]; then
@@ -145,7 +153,9 @@ function initialize_AI1 {
                          echo "export EDITOR=/usr/bin/emacs" >> ~/.bashrc;
                          echo "alias o=gnome-open" >> ~/.bashrc;
                          echo "alias e=emacs" >> ~/.bashrc;
-                       fi'
+                       fi' &&
+
+   sudo apt-add-repository universe
 }
 
 # Install functions
@@ -259,7 +269,7 @@ while true; do
             initialize="initialize_AI1"
             mandatory=(
                 "git;apt -y install git"
-                "UvA-VPN;apt -y install uvavpn"
+                # "UvA-VPN;apt -y install uvavpn"
                 "Prolog;install_prolog"
                 "Python;install_python"
             )
@@ -317,5 +327,5 @@ done
 
 echo -n "[${total}/${total}] Upgrading packages"
 apt -y upgrade &>> ${LOGFILE}
-echo -e "\r[${total}/${total}] ${green}Packages upgraded ${reset}"
-echo "${green}Finished!${reset} If nothing went wrong, you can reboot your computer."
+echo -e "\r[${total}/${total}] ${GREEN}Packages upgraded ${RESET}"
+echo "${GREEN}Finished!${RESET} If nothing went wrong, you can reboot your computer."

@@ -48,7 +48,9 @@ distro=$(lsb_release -c)
 distro=${distro##*:}
 distro=${distro:1}
 
-#TODO -y bij de rest
+#TODO -y for others then apt.
+# Packed managers for other distros
+# Mostly from https://www.linode.com/docs/tools-reference/linux-package-management/
 case `uname` in
     Linux )
         # Debian, Ubuntu
@@ -58,13 +60,15 @@ case `uname` in
                        return; }
         # Fedora, CentOS
         which yum && { install="yum install";
+                       #TODO Does this require rpm?
                        add_repo="[add_repo]";
-                       upgrade="[upgrade]";
+                       upgrade="yum upgrade";
                        return; }
-        which dnf && { install="[install]";
+        which dnf && { install="dnf install";
                        #TODO Is `dnf config-manager --set-enabled` required?
+                       #    only for local files?
                        add_repo="dnf config-manager --add-repo";
-                       upgrade="[upgrade]";
+                       upgrade="dnf upgrade";
                        return; }
         # OpenSUSE
         which zypper && { install="[install]";
@@ -72,9 +76,9 @@ case `uname` in
                           upgrade="[upgrade]";
                           return; }
         # Arch Linux
-        which pacman && { install="[install]";
-                          add_repo="[add_repo]";
-                          upgrade="pacman -Sy";
+        which pacman && { install="pacman -S";
+                          add_repo="pacman -Q";
+                          upgrade="pacman -Su";
                           return; }
         ;;
     * )
@@ -121,9 +125,9 @@ INSTALLING ${app%;*}
 
 function initialize_informatica {
     # Add repositories
-    add-apt-repository -y ppa:uva-informatica/meta-packages &&
-    add-apt-repository -y ppa:uva-informatica/sim-pl &&
-    add-apt-repository -y ppa:uva-informatica/uvavpn &&
+    # add-apt-repository -y ppa:uva-informatica/meta-packages &&
+    # add-apt-repository -y ppa:uva-informatica/sim-pl &&
+    # add-apt-repository -y ppa:uva-informatica/uvavpn &&
     # Load repositories
     apt -y update
 }
@@ -238,9 +242,10 @@ while true; do
             mandatory=(
                 "git;apt -y install git"
                 "Java;install_java"
-                "SIM-PL;apt -y install sim-pl"
-                "UvA-VPN;apt -y install uvavpn"
-                "UvA packages;apt -y install informatica-common informatica-jaar-1"
+                # "SIM-PL;apt -y install sim-pl"
+                # "UvA-VPN;apt -y install uvavpn"
+                # "UvA packages;apt -y install informatica-common informatica-jaar-1"
+                "Python;install_python"
                 "Python libraries;install_python_extra")
             recommended=(
                 "Atom;install_atom"

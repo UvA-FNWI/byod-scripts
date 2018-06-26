@@ -18,3 +18,5 @@ This script will automatically install many packages for
 - Informatica year 1 & 2
 - Artificial Intelligence year 1
 - Artificial Intelligence year 2
+
+For more info check https://linux.datanose.nl/

@@ -6,11 +6,11 @@
 
 ## Package manager coverage
 
-- [![Apt coverage](https://i.imgur.com/zgqUEqX.png)]() Apt
-- [![Pacmen coverage](https://i.imgur.com/1tRQGua.png)]() Pacmen
-- [![Dnf coverage](https://i.imgur.com/1tRQGua.png)]() Dnf
-- [![Zypper coverage](https://i.imgur.com/1tRQGua.png)]() Zypper
-- [![Yum coverage](https://i.imgur.com/V1SyDZy.png)]() Yum
+- [![Apt coverage](https://i.imgur.com/Et9HilG.png)]() Apt
+- [![Pacmen coverage](https://i.imgur.com/4cCY25v.png)]() Pacmen
+- [![Dnf coverage](https://i.imgur.com/4cCY25v.png)]() Dnf
+- [![Zypper coverage](https://i.imgur.com/4cCY25v.png)]() Zypper
+- [![Yum coverage](https://i.imgur.com/VVZoERT.png)]() Yum
 
 ## Discription
 

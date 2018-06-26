@@ -3,13 +3,13 @@
 [![Build status](https://i.imgur.com/bZag5zT.png)]()
 [![Bash version](https://i.imgur.com/ZsjtDis.png)]()
 
-## Test coverage
+## Package manager coverage
 
-- [![Apt coverage](https://i.imgur.com/ot9wyia.png)]() Fully tested
-- [![Pacmen coverage](https://i.imgur.com/gARxAwm.png)]() Not fully tested
-- [![Dnf coverage](https://i.imgur.com/aVW20oD.png)]() Not yet tested
-- [![Zypper coverage](https://i.imgur.com/XXPMa8O.png)]() Not yet tested
-- [![Yum coverage](https://i.imgur.com/88zgjCM.png)]() Not finished
+- [![Apt coverage](https://i.imgur.com/zgqUEqX.png)]() Apt
+- [![Pacmen coverage](https://i.imgur.com/1tRQGua.png)]() Pacmen
+- [![Dnf coverage](https://i.imgur.com/1tRQGua.png)]() Dnf
+- [![Zypper coverage](https://i.imgur.com/1tRQGua.png)]() Zypper
+- [![Yum coverage](https://i.imgur.com/V1SyDZy.png)]() Yum
 
 ## Discription
 

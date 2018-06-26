@@ -2,6 +2,7 @@
 
 [![Build status](https://i.imgur.com/bZag5zT.png)]()
 [![Bash version](https://i.imgur.com/ZsjtDis.png)]()
+[![Made by](https://i.imgur.com/glZaFDi.png)]()
 
 ## Package manager coverage
 

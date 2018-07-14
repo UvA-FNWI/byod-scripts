@@ -54,59 +54,6 @@ if [ $(bc <<< "`(tput colors) 2>/dev/null || echo 0` >= 8") -eq 1 ]; then
     RESET=`tput sgr0`
 fi
 
-distro=$(lsb_release -c)
-distro=${distro##*:}
-distro=${distro:1}
-
-#TODO -y for others then apt.
-# Packed managers for other distros
-# Mostly from https://www.linode.com/docs/tools-reference/linux-package-management/
-case `uname` in
-    Linux )
-        # Debian, Ubuntu
-        which apt && { install="apt install -y";
-                       add_repo="add-apt-repository -y";
-                       upgrade="apt upgrade -y";
-                       return; }
-        # Fedora, CentOS
-        #TODO not tested.
-        which yum && { install="yum install";
-                       #TODO Does this require rpm?
-                       add_repo="[add_repo]";
-                       upgrade="yum upgrade";
-                       return; }
-        #TODO not tested.
-        which dnf && { install="dnf install";
-                       #TODO Is `dnf config-manager --set-enabled` required?
-                       add_repo="dnf config-manager --add-repo";
-                       upgrade="dnf upgrade";
-                       return; }
-        # OpenSUSE
-        #TODO not tested.
-        which zypper && { install="zypper in";
-                          add_repo="zypper addrepo";
-                          upgrade="zypper up";
-                          return; }
-        # Arch Linux
-        #TODO not tested.
-        which pacman && { install="pacman -S";
-                          add_repo="pacman -Q";
-                          upgrade="pacman -Su";
-                          return; }
-        ;;
-    * )
-        if [ -z "$1" ]; then
-            echo "It seems that your packed manager is not supported"
-            echo "edit the lines 104, 105 and 106 to comply with your packed manager"
-            echo "restart the script with \"${BOLD}$0 manual${RESET}\""
-            exit 1
-        fi
-        install="[package install command]"
-        add_repo="[add repositorie command]"
-        upgrade="[upgrades all packages command]"
-        ;;
-esac
-
 tput reset
 echo -e ${TITLE}
 > ${LOGFILE}
@@ -133,9 +80,9 @@ INSTALLING ${app%;*}
 function initialize_informatica {
     # Add repositories
     sudo apt-add-repository universe &&
-    # add-apt-repository -y ppa:uva-informatica/meta-packages &&
-    # add-apt-repository -y ppa:uva-informatica/sim-pl &&
-    # add-apt-repository -y ppa:uva-informatica/uvavpn &&
+    add-apt-repository -y ppa:uva-informatica/meta-packages &&
+    add-apt-repository -y ppa:uva-informatica/sim-pl &&
+    add-apt-repository -y ppa:uva-informatica/uvavpn &&
     # Load repositories
     apt -y update
 }
@@ -252,9 +199,9 @@ while true; do
             mandatory=(
                 "git;apt -y install git"
                 "Java;install_java"
-                # "SIM-PL;apt -y install sim-pl"
-                # "UvA-VPN;apt -y install uvavpn"
-                # "UvA packages;apt -y install informatica-common informatica-jaar-1"
+                "SIM-PL;apt -y install sim-pl"
+                "UvA-VPN;apt -y install uvavpn"
+                "UvA packages;apt -y install informatica-common informatica-jaar-1"
                 "Python;install_python"
                 "Python libraries;install_python_extra")
             recommended=(

@@ -1,18 +1,10 @@
 # Shell-script
 
 [![Build status](https://i.imgur.com/bZag5zT.png)]()
+[![Packet manager](https://i.imgur.com/ot9wyia.png)]()
 [![Bash version](https://i.imgur.com/ZsjtDis.png)]()
 [![Made by](https://i.imgur.com/glZaFDi.png)]()
 
-## Package manager coverage
-
-- [![Apt coverage](https://i.imgur.com/Et9HilG.png)]() Apt
-- [![Pacmen coverage](https://i.imgur.com/4cCY25v.png)]() Pacmen
-- [![Dnf coverage](https://i.imgur.com/4cCY25v.png)]() Dnf
-- [![Zypper coverage](https://i.imgur.com/4cCY25v.png)]() Zypper
-- [![Yum coverage](https://i.imgur.com/VVZoERT.png)]() Yum
-
-## Discription
 
 This script will automatically install many packages for
 - Informatica year 1 & 2

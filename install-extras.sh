@@ -82,14 +82,11 @@ function initialize_informatica {
     sudo apt-add-repository universe &&
     add-apt-repository -y ppa:uva-informatica/meta-packages &&
     add-apt-repository -y ppa:uva-informatica/sim-pl &&
-    add-apt-repository -y ppa:uva-informatica/uvavpn &&
     # Load repositories
     apt -y update
 }
 
 function initialize_AI1 {
-    gsettings set org.gnome.desktop.wm.keybindings panel-run-dialog "['<Alt>F2']" &&
-    gsettings set org.gnome.desktop.wm.preferences button-layout :minimize,maximize,close &&
 
     su $SUDO_USER -c ' mkdir -p ~/bin;
                        if [ -z "`grep \"BscKI\" ~/.bashrc`" ]; then
@@ -116,38 +113,35 @@ function install_prolog {
 }
 
 function install_java {
-    add-apt-repository -y ppa:webupd8team/java
-    apt update
-    echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections # avoids user promt
-    apt -y install oracle-java8-installer oracle-java8-set-default
+    apt -y install openjdk-11-jdk
 }
 
-function install_atom {
-    add-apt-repository -y ppa:webupd8team/atom &&
-    apt -y update &&
-    apt -y install atom
+function install_code {
+	curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
+	mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
+	sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
+	apt -y install apt-transport-https
+	apt -y update
+	apt -y install code # or code-insiders
+	
 }
 
 function install_python {
     apt -y install python  python-pip  python-virtualenv
     apt -y install python3 python3-pip python3-virtualenv
-    su $SUDO_USER -c " virtualenv -p /usr/bin/python2.7 ~/envPython2.7 "
-    su $SUDO_USER -c " virtualenv -p /usr/bin/python3   ~/envPython3   "
-    su $SUDO_USER -c "source ~/envPython3/bin/activate; pip install nltk jupyter; deactivate"
+	apt -y install jupyter python3-nltk
+	
 }
 
 function install_python_extra {
     apt -y install python  python-pip  python-virtualenv
     apt -y install python3 python3-pip python3-virtualenv
-    su $SUDO_USER -c "source ~/envPython2.7/bin/activate; pip install numpy scipy nltk matplotlib pillow; deactivate" &>> ${LOGFILE}
-    su $SUDO_USER -c "source ~/envPython3/bin/activate; pip install numpy scipy nltk matplotlib pillow; deactivate" &>> ${LOGFILE}
+	apt -y install  python3-numpy
+	apt -y install  python3-scipy
+	apt -y install  python3-matplotlib
+	apt -y install  python3-willow
 }
 
-function install_zsh {
-    apt -y install zsh &&
-    sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)" &&
-    sudo -u $USERNAME chsh -s $(which zsh)
-}
 
 function install_sql {
     sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password your_password'
@@ -161,8 +155,6 @@ function install_sql {
 }
 
 function install_r {
-    add-apt-repository -y ppa:marutter/rrutter
-    apt update
     apt -y install r-base
 }
 
@@ -180,72 +172,50 @@ function install_protege {
                       chmod +x protege;"
 }
 
-function install_anaconda {
-    su $SUDO_USER -c "wget http://sbt.science.uva.nl/boydki_software/Anaconda2-4.4.0-Linux-x86_64.sh;
-                      chmod +x Anaconda2-4.4.0-Linux-x86_64.sh;
-                      rm -rf ~/anaconda2/;
-                      ./Anaconda2-4.4.0-Linux-x86_64.sh -bf;
-                      rm ./Anaconda2-4.4.0-Linux-x86_64.sh"
-}
-
-echo "1) Informatica year 1 & 2
-2) Artificial Intelligence year 1
-3) Artificial Intelligence year 2"
+echo "1) Informatica
+2) Artificial Intelligence
 while true; do
     read -p "Which of the above listed items fits you the best? " answer
     case $answer in
         [1] ) # Set Informatica year 1&2 variables
             initialize="initialize_informatica"
             mandatory=(
-                "git;apt -y install git"
+                "build-essential;apt -y install build-essential clang lldb expect"
                 "Java;install_java"
                 "SIM-PL;apt -y install sim-pl"
-                "UvA-VPN;apt -y install uvavpn"
+                "UvA-VPN;apt -y install openconnect"
                 "UvA packages;apt -y install informatica-common informatica-jaar-1"
                 "Python;install_python"
-                "Python libraries;install_python_extra")
-            recommended=(
-                "Atom;install_atom"
+                "Python libraries;install_python_extra",
+				"Visual studio Code;install_code"
                 "LaTeX;apt -y install texlive-full"
-            )
+			)
             optional=(
                 "Chromium;apt -y install chromium-browser"
-                "Oh-My-Zsh;install_zsh"
             ); break;;
         [2] ) # Set Artificial Intelligence year 1 variables
             initialize="initialize_AI1"
             mandatory=(
                 "git;apt -y install git"
-                # "UvA-VPN;apt -y install uvavpn"
+                # "UvA-VPN;apt -y install openconnect"
                 "Prolog;install_prolog"
                 "Python;install_python"
-            )
-            recommended=(
                 "Atom;install_atom"
                 "LaTeX;apt -y install texlive-full"
-            )
-            optional=(
-                "Chromium;apt -y install chromium-browser"
-                "Oh-My-Zsh;install_zsh"
-            ); break;;
-        [3] ) # Set Artificial Intelligence year 2 variables
-            mandatory=(
                 "C essentials;apt -y install build-essential gcc valgrind"
                 "Python libraries;install_python_extra"
                 "SQL;install_sql"
                 "Java;install_java"
                 "R;install_r"
                 "Weka;apt -y install weka"
-            )
-            recommended=(
-                 "MySQL workbench;apt -y install mysql-workbench"
-                 "Protege;install_protege"
+                "MySQL workbench;apt -y install mysql-workbench"
+                "Protege;install_protege"
+				
             )
             optional=(
-                "Anaconda;install_anaconda"
-                "Eclipse;apt -y install eclipse"
+                "Chromium;apt -y install chromium-browser"
             ); break;;
-        * ) echo "Pleases answer with 1, 2 or 3";;
+        * ) echo "Pleases answer with 1 or 2";;
     esac
 done
 tput reset
@@ -255,15 +225,9 @@ echo -ne "Initializing..."
 $initialize &>> ${LOGFILE}
 echo -e "\rInstalling packages:"
 
-total=$(( ${#mandatory[@]} + ${#recommended[@]} + ${#optional[@]} + 1 ))
+total=$(( ${#mandatory[@]} + ${#optional[@]} + 1 ))
 for ((i=0; i < ${#mandatory[@]}; i++)) do
     install_app "${mandatory[$i]}" "[$((i + 1))/$total]"
-done
-for ((i=0; i < ${#recommended[@]}; i++)) do
-    tag=[$((i + ${#mandatory[@]} + 1))/$total]
-    if check_answer "$tag Would you like to install ${recommended[$i]%;*} (recommended)?"; then
-        install_app "${recommended[$i]}" "$tag"
-    fi
 done
 for ((i=0; i < ${#optional[@]}; i++)) do
     tag=[$((i + ${#mandatory[@]} + ${#recommended[@]} + 1))/$total]

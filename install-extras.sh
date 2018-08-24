@@ -78,7 +78,7 @@ INSTALLING ${app%;*}
 }
 
 function install_uvavpn {
-    apt -y install network-manager-openconnect-gnome
+    apt-get -y install network-manager-openconnect-gnome
     nmcli con add type vpn \
     con-name "UvA VPN" \
     ifname "*" \
@@ -90,11 +90,11 @@ function install_uvavpn {
 
 function initialize_informatica {
     # Add repositories
-    sudo apt-add-repository universe &&
-    add-apt-repository -y ppa:uva-informatica/meta-packages &&
-    add-apt-repository -y ppa:uva-informatica/sim-pl &&
+    sudo apt-get-add-repository universe &&
+    add-apt-get-repository -y ppa:uva-informatica/meta-packages &&
+    add-apt-get-repository -y ppa:uva-informatica/sim-pl &&
     # Load repositories
-    apt -y update
+    apt-get -y update
 }
 
 function initialize_AI1 {
@@ -110,63 +110,63 @@ function initialize_AI1 {
                          echo "alias e=emacs" >> ~/.bashrc;
                        fi' &&
 
-   sudo apt-add-repository universe
+   sudo apt-get-add-repository universe
 }
 
 # Install functions
 function install_prolog {
-    apt -y install swi-prolog emacs emacs-goodies-extra-el
+    apt-get -y install swi-prolog emacs emacs-goodies-extra-el
 
     su $SUDO_USER -c ' echo "(setq auto-mode-alist (cons (cons \"\\\\.pl\" '\''prolog-mode) auto-mode-alist))" >> ~/.emacs '
     su $SUDO_USER -c ' echo "(require '\''color-theme)" >> ~/.emacs '
-    su $SUDO_USER -c ' echo "(eval-after-load \"color-theme\" '\''(progn (color-theme-initialize) (color-theme-dark-laptop)))" >> ~/.emacs '
+    su $SUDO_USER -c ' echo "(eval-after-load \"color-theme\" '\''(progn (color-theme-initialize) (color-theme-dark-lapt-getop)))" >> ~/.emacs '
     su $SUDO_USER -c ' echo "(show-paren-mode 1)" >> ~/.emacs '
 }
 
 function install_java {
-    apt -y install openjdk-11-jdk
+    apt-get -y install openjdk-11-jdk
 }
 
 function install_code {
     curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
-    mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
-    sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
-    apt -y install apt-transport-https
-    apt -y update
-    apt -y install code # or code-insiders
+    mv microsoft.gpg /etc/apt-get/trusted.gpg.d/microsoft.gpg
+    sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt-get/sources.list.d/vscode.list'
+    apt-get -y install apt-get-transport-https
+    apt-get -y update
+    apt-get -y install code # or code-insiders
     
 }
 
 function install_python {
-    apt -y install python  python-pip  python-virtualenv
-    apt -y install python3 python3-pip python3-virtualenv
-    apt -y install jupyter python3-nltk
+    apt-get -y install python  python-pip  python-virtualenv
+    apt-get -y install python3 python3-pip python3-virtualenv
+    apt-get -y install jupyter python3-nltk
     
 }
 
 function install_python_extra {
-    apt -y install python  python-pip  python-virtualenv
-    apt -y install python3 python3-pip python3-virtualenv
-    apt -y install  python3-numpy
-    apt -y install  python3-scipy
-    apt -y install  python3-matplotlib
-    apt -y install  python3-willow
+    apt-get -y install python  python-pip  python-virtualenv
+    apt-get -y install python3 python3-pip python3-virtualenv
+    apt-get -y install  python3-numpy
+    apt-get -y install  python3-scipy
+    apt-get -y install  python3-matplotlib
+    apt-get -y install  python3-willow
 }
 
 
 function install_sql {
     sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password your_password'
     sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password your_password'
-    sudo apt-get -y install mysql-server
+    sudo apt-get-get -y install mysql-server
     mysql -u root -e "DROP USER 'root'@'localhost';
                       CREATE USER 'root'@'localhost' IDENTIFIED BY '';
                       GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost';
                       FLUSH PRIVILEGES;"
-    apt -y install sqlite libsqlite-dev mysql-client
+    apt-get -y install sqlite libsqlite-dev mysql-client
 }
 
 function install_r {
-    apt -y install r-base
+    apt-get -y install r-base
 }
 
 function install_protege {
@@ -191,40 +191,40 @@ while true; do
         [1] ) # Set Informatica year 1&2 variables
             initialize="initialize_informatica"
             mandatory=(
-                "build-essential;apt -y install build-essential clang lldb expect"
+                "build-essential;apt-get -y install build-essential clang lldb expect"
                 "Java;install_java"
-                "SIM-PL;apt -y install sim-pl"
+                "SIM-PL;apt-get -y install sim-pl"
                 "UvA-VPN;install_uvavpn"
-                "UvA packages;apt -y install informatica-common informatica-jaar-1"
+                "UvA packages;apt-get -y install informatica-common informatica-jaar-1"
                 "Python;install_python"
                 "Python libraries;install_python_extra"
                 "Visual studio Code;install_code"
-                "LaTeX;apt -y install texlive-full"
+                "LaTeX;apt-get -y install texlive-full"
             )
             optional=(
-                "Chromium;apt -y install chromium-browser"
+                "Chromium;apt-get -y install chromium-browser"
             ); break;;
         [2] ) # Set Artificial Intelligence year 1 variables
             initialize="initialize_AI1"
             mandatory=(
-                "git;apt -y install git"
+                "git;apt-get -y install git"
                 # "UvA-VPN;install_uvavpn"
                 "Prolog;install_prolog"
                 "Python;install_python"
                 "Atom;install_atom"
-                "LaTeX;apt -y install texlive-full"
-                "C essentials;apt -y install build-essential gcc valgrind"
+                "LaTeX;apt-get -y install texlive-full"
+                "C essentials;apt-get -y install build-essential gcc valgrind"
                 "Python libraries;install_python_extra"
                 "SQL;install_sql"
                 "Java;install_java"
                 "R;install_r"
-                "Weka;apt -y install weka"
-                "MySQL workbench;apt -y install mysql-workbench"
+                "Weka;apt-get -y install weka"
+                "MySQL workbench;apt-get -y install mysql-workbench"
                 "Protege;install_protege"
                 
             )
             optional=(
-                "Chromium;apt -y install chromium-browser"
+                "Chromium;apt-get -y install chromium-browser"
             ); break;;
         * ) echo "Pleases answer with 1 or 2";;
     esac
@@ -249,6 +249,6 @@ for ((i=0; i < ${#optional[@]}; i++)) do
 done
 
 echo -n "[${total}/${total}] Upgrading packages"
-apt -y upgrade &>> ${LOGFILE}
+apt-get -y upgrade &>> ${LOGFILE}
 echo -e "\r[${total}/${total}] ${GREEN}Packages upgraded ${RESET}"
 echo "${GREEN}Finished!${RESET} If nothing went wrong, you can reboot your computer."

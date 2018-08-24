@@ -77,6 +77,17 @@ INSTALLING ${app%;*}
     fi
 }
 
+function install_uvavpn {
+    apt -y install network-manager-openconnect-gnome
+    nmcli con add type vpn \
+    con-name "UvA VPN" \
+    ifname "*" \
+    vpn-type openconnect \
+    -- \
+    vpn.data "gateway=uvavpn.uva.nl,protocol=nc"
+
+}
+
 function initialize_informatica {
     # Add repositories
     sudo apt-add-repository universe &&
@@ -117,29 +128,29 @@ function install_java {
 }
 
 function install_code {
-	curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
-	mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
-	sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
-	apt -y install apt-transport-https
-	apt -y update
-	apt -y install code # or code-insiders
-	
+    curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
+    mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
+    sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
+    apt -y install apt-transport-https
+    apt -y update
+    apt -y install code # or code-insiders
+    
 }
 
 function install_python {
     apt -y install python  python-pip  python-virtualenv
     apt -y install python3 python3-pip python3-virtualenv
-	apt -y install jupyter python3-nltk
-	
+    apt -y install jupyter python3-nltk
+    
 }
 
 function install_python_extra {
     apt -y install python  python-pip  python-virtualenv
     apt -y install python3 python3-pip python3-virtualenv
-	apt -y install  python3-numpy
-	apt -y install  python3-scipy
-	apt -y install  python3-matplotlib
-	apt -y install  python3-willow
+    apt -y install  python3-numpy
+    apt -y install  python3-scipy
+    apt -y install  python3-matplotlib
+    apt -y install  python3-willow
 }
 
 
@@ -183,13 +194,13 @@ while true; do
                 "build-essential;apt -y install build-essential clang lldb expect"
                 "Java;install_java"
                 "SIM-PL;apt -y install sim-pl"
-                "UvA-VPN;apt -y install openconnect"
+                "UvA-VPN;install_uvavpn"
                 "UvA packages;apt -y install informatica-common informatica-jaar-1"
                 "Python;install_python"
                 "Python libraries;install_python_extra",
-				"Visual studio Code;install_code"
+                "Visual studio Code;install_code"
                 "LaTeX;apt -y install texlive-full"
-			)
+            )
             optional=(
                 "Chromium;apt -y install chromium-browser"
             ); break;;
@@ -197,7 +208,7 @@ while true; do
             initialize="initialize_AI1"
             mandatory=(
                 "git;apt -y install git"
-                # "UvA-VPN;apt -y install openconnect"
+                # "UvA-VPN;install_uvavpn"
                 "Prolog;install_prolog"
                 "Python;install_python"
                 "Atom;install_atom"
@@ -210,7 +221,7 @@ while true; do
                 "Weka;apt -y install weka"
                 "MySQL workbench;apt -y install mysql-workbench"
                 "Protege;install_protege"
-				
+                
             )
             optional=(
                 "Chromium;apt -y install chromium-browser"

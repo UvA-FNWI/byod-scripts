@@ -184,7 +184,7 @@ function install_protege {
 }
 
 echo "1) Informatica
-2) Artificial Intelligence
+2) Artificial Intelligence"
 while true; do
     read -p "Which of the above listed items fits you the best? " answer
     case $answer in
@@ -240,8 +240,9 @@ total=$(( ${#mandatory[@]} + ${#optional[@]} + 1 ))
 for ((i=0; i < ${#mandatory[@]}; i++)) do
     install_app "${mandatory[$i]}" "[$((i + 1))/$total]"
 done
+
 for ((i=0; i < ${#optional[@]}; i++)) do
-    tag=[$((i + ${#mandatory[@]} + ${#recommended[@]} + 1))/$total]
+    tag=[$((i + ${#mandatory[@]} + ${#optional[@]} + 1))/$total]
     if check_answer "$tag Would you like to install ${optional[$i]%;*} (optional)?"; then
         install_app "${optional[$i]}" "$tag"
     fi

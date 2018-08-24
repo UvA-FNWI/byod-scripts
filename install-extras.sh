@@ -197,7 +197,7 @@ while true; do
                 "UvA-VPN;install_uvavpn"
                 "UvA packages;apt -y install informatica-common informatica-jaar-1"
                 "Python;install_python"
-                "Python libraries;install_python_extra",
+                "Python libraries;install_python_extra"
                 "Visual studio Code;install_code"
                 "LaTeX;apt -y install texlive-full"
             )

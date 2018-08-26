@@ -10,6 +10,7 @@ Made by:\n
  - B. Terwijn\n
  - L.A. van Hijfte\n
  - S.J.N. van den Broek\n
+ - S.R.W. van Kampen\n
  "
 LOGFILE="install_extras.log"
 
@@ -128,7 +129,7 @@ function install_java {
 }
 
 function install_code {
-    curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
+    wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
     mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
     sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
     apt-get -y install apt-transport-https

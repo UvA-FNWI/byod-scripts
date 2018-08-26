@@ -252,7 +252,7 @@ for ((i=0; i < ${#mandatory[@]}; i++)) do
 done
 
 for ((i=0; i < ${#optional[@]}; i++)) do
-    tag=[$((i + ${#mandatory[@]} + ${#optional[@]} + 1))/$total]
+    tag=[$((i + ${#mandatory[@]} + ${#optional[@]}))/$total]
     if check_answer "$tag Would you like to install ${optional[$i]%;*} (optional)?"; then
         install_app "${optional[$i]}" "$tag"
     fi

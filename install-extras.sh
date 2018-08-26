@@ -120,7 +120,7 @@ function install_prolog {
 
     su $SUDO_USER -c ' echo "(setq auto-mode-alist (cons (cons \"\\\\.pl\" '\''prolog-mode) auto-mode-alist))" >> ~/.emacs '
     su $SUDO_USER -c ' echo "(require '\''color-theme)" >> ~/.emacs '
-    su $SUDO_USER -c ' echo "(eval-after-load \"color-theme\" '\''(progn (color-theme-initialize) (color-theme-dark-lapt-getop)))" >> ~/.emacs '
+    su $SUDO_USER -c ' echo "(eval-after-load \"color-theme\" '\''(progn (color-theme-initialize) (color-theme-dark-laptop)))" >> ~/.emacs '
     su $SUDO_USER -c ' echo "(show-paren-mode 1)" >> ~/.emacs '
 }
 
@@ -158,7 +158,7 @@ function install_python_extra {
 function install_sql {
     sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password your_password'
     sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password your_password'
-    sudo apt-get-get -y install mysql-server
+    sudo apt-get -y install mysql-server
     mysql -u root -e "DROP USER 'root'@'localhost';
                       CREATE USER 'root'@'localhost' IDENTIFIED BY '';
                       GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost';

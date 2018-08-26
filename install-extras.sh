@@ -125,7 +125,7 @@ function install_prolog {
 }
 
 function install_java {
-    apt-get -y install openjdk-11-jdk
+    apt-get -y install openjdk-11-jre openjdk-11-jdk
 }
 
 function install_code {

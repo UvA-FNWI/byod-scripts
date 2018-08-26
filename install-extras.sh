@@ -166,6 +166,12 @@ function install_sql {
     apt-get -y install sqlite libsqlite-dev mysql-client
 }
 
+function install_atom {
+    wget -qO atom-latest.deb https://atom.io/download/deb
+    apt-get -y install ./atom-latest.deb
+    rm atom-latest.deb
+}
+
 function install_r {
     apt-get -y install r-base
 }

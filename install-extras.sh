@@ -90,9 +90,9 @@ function install_uvavpn {
 
 function initialize_informatica {
     # Add repositories
-    sudo apt-get-add-repository universe &&
-    add-apt-get-repository -y ppa:uva-informatica/meta-packages &&
-    add-apt-get-repository -y ppa:uva-informatica/sim-pl &&
+    sudo add-apt-repository universe &&
+    add-apt-repository -y ppa:uva-informatica/meta-packages &&
+    add-apt-repository -y ppa:uva-informatica/sim-pl &&
     # Load repositories
     apt-get -y update
 }
@@ -110,7 +110,7 @@ function initialize_AI1 {
                          echo "alias e=emacs" >> ~/.bashrc;
                        fi' &&
 
-   sudo apt-get-add-repository universe
+   sudo add-apt-repository universe
 }
 
 # Install functions
@@ -129,9 +129,9 @@ function install_java {
 
 function install_code {
     curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
-    mv microsoft.gpg /etc/apt-get/trusted.gpg.d/microsoft.gpg
-    sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt-get/sources.list.d/vscode.list'
-    apt-get -y install apt-get-transport-https
+    mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
+    sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
+    apt-get -y install apt-transport-https
     apt-get -y update
     apt-get -y install code # or code-insiders
     

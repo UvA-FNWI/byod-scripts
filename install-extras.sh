@@ -217,7 +217,7 @@ while true; do
             initialize="initialize_AI1"
             mandatory=(
                 "git;apt-get -y install git"
-                # "UvA-VPN;install_uvavpn"
+                "UvA-VPN;install_uvavpn"
                 "Prolog;install_prolog"
                 "Python;install_python"
                 "Atom;install_atom"

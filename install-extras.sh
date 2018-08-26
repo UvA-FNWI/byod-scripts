@@ -90,6 +90,8 @@ function install_uvavpn {
 }
 
 function initialize_informatica {
+    # Remove the Amazon launcher
+    sudo apt-get purge -yq ubuntu-web-launchers
     # Add repositories
     sudo add-apt-repository universe &&
     add-apt-repository -y ppa:uva-informatica/meta-packages &&
@@ -99,7 +101,7 @@ function initialize_informatica {
 }
 
 function initialize_AI1 {
-
+    sudo apt-get purge -yq ubuntu-web-launchers
     su $SUDO_USER -c ' mkdir -p ~/bin;
                        if [ -z "`grep \"BscKI\" ~/.bashrc`" ]; then
                          echo "" >> ~/.bashrc;

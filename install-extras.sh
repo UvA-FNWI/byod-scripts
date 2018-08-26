@@ -258,6 +258,6 @@ for ((i=0; i < ${#optional[@]}; i++)) do
 done
 
 echo -n "[${total}/${total}] Upgrading packages"
-apt-get -y upgrade &>> ${LOGFILE}
+DEBIAN_FRONTEND=noninteractive apt-get -yq upgrade &>> ${LOGFILE}
 echo -e "\r[${total}/${total}] ${GREEN}Packages upgraded ${RESET}"
 echo "${GREEN}Finished!${RESET} If nothing went wrong, you can reboot your computer."

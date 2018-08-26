@@ -20,7 +20,7 @@ function check_answer {
         case $answer in
             [Yy]* ) return 0;;
             [Nn]* ) return 1;;
-            * ) echo "Pleases answer yes (y) or no (n)";;
+            * ) echo "Please answer yes (y) or no (n)";;
         esac
     done
 }
@@ -233,7 +233,7 @@ while true; do
             optional=(
                 "Chromium;apt-get -y install chromium-browser"
             ); break;;
-        * ) echo "Pleases answer with 1 or 2";;
+        * ) echo "Please answer with 1 or 2";;
     esac
 done
 tput reset

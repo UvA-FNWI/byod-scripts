@@ -175,7 +175,7 @@ function install_sql {
 }
 
 function install_atom {
-    wget -qO atom.gpg https://packagecloud.io/AtomEditor/atom/gpgkey
+    wget -qO- https://packagecloud.io/AtomEditor/atom/gpgkey | gpg --dearmor > atom.gpg
     mv atom.gpg /etc/apt/trusted.gpg.d/atom.gpg
     sudo sh -c 'echo "deb [arch=amd64] https://packagecloud.io/AtomEditor/atom/any/ any main" > /etc/apt/sources.list.d/atom.list'
     apt-get -y update

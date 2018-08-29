@@ -96,17 +96,16 @@ function block_amazon_launcher {
 }
 
 function initialize_informatica {
-    block_amazon_launcher
     # Add repositories
     sudo add-apt-repository universe &&
     add-apt-repository -y ppa:uva-informatica/meta-packages &&
     add-apt-repository -y ppa:uva-informatica/sim-pl &&
     # Load repositories
     apt-get -y update
+    block_amazon_launcher
 }
 
 function initialize_AI1 {
-    block_amazon_launcher
     su $SUDO_USER -c ' mkdir -p ~/bin;
                        if [ -z "`grep \"BscKI\" ~/.bashrc`" ]; then
                          echo "" >> ~/.bashrc;
@@ -118,7 +117,9 @@ function initialize_AI1 {
                          echo "alias e=emacs" >> ~/.bashrc;
                        fi' &&
 
-   sudo add-apt-repository universe
+   sudo add-apt-repository universe &&
+   apt-get -y update &&
+   block_amazon_launcher
 }
 
 # Install functions

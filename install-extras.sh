@@ -201,6 +201,10 @@ function install_protege {
                       chmod +x protege;"
 }
 
+function install_latex {
+    apt-get -y install texlive-full
+}
+
 echo "1) Informatica
 2) Artificial Intelligence"
 while true; do
@@ -217,7 +221,7 @@ while true; do
                 "Python;install_python"
                 "Python libraries;install_python_extra"
                 "Visual studio Code;install_code"
-                "LaTeX;apt-get -y install texlive-full"
+                "LaTeX;install_latex"
             )
             optional=(
                 "Chromium;apt-get -y install chromium-browser"
@@ -230,7 +234,7 @@ while true; do
                 "Prolog;install_prolog"
                 "Python;install_python"
                 "Atom;install_atom"
-                "LaTeX;apt-get -y install texlive-full"
+                "LaTeX;install_latex"
                 "C essentials;apt-get -y install build-essential gcc valgrind"
                 "Python libraries;install_python_extra"
                 "SQL;install_sql"

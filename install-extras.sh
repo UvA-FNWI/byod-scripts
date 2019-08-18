@@ -109,7 +109,7 @@ function initialize_AI1 {
     su $SUDO_USER -c ' mkdir -p ~/bin;
                        if [ -z "`grep \"BscKI\" ~/.bashrc`" ]; then
                          echo "" >> ~/.bashrc;
-                         echo "# boyd BscKI settings" >> ~/.bashrc;
+                         echo "# byod BscKI settings" >> ~/.bashrc;
                          echo "export PATH=\$PATH:~/bin" >> ~/.bashrc;
                          echo "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/usr/local/lib" >> ~/.bashrc;
                          echo "export EDITOR=/usr/bin/emacs" >> ~/.bashrc;

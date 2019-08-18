@@ -202,7 +202,10 @@ function install_protege {
 }
 
 function install_latex {
-    apt-get -y install texlive-full
+    # A selection of TeX Live packages
+    # (texlive-fonts-recommended, texlive-latex-base, texlive-latex-recommended)
+    apt-get -y install texlive
+
 }
 
 echo "1) Informatica
@@ -217,11 +220,11 @@ while true; do
                 "Java;install_java"
                 "SIM-PL;apt-get -y install sim-pl"
                 "UvA-VPN;install_uvavpn"
+                "LaTeX;install_latex"
                 "UvA packages;apt-get -y install informatica-common informatica-jaar-1"
                 "Python;install_python"
                 "Python libraries;install_python_extra"
                 "Visual studio Code;install_code"
-                "LaTeX;install_latex"
             )
             optional=(
                 "Chromium;apt-get -y install chromium-browser"

@@ -40,7 +40,7 @@ if [[ $SUDO_UID -eq 0 ]]; then
    exit 1
 fi
 
-if ! `lsb_release -c | grep -q bionic`; then
+if ! `lsb_release -c | grep -q focal`; then
     echo "This script is recommended to be executed on a machine running Ubuntu 18.04 LTS"
     if ! check_answer "Do you wish to continue?"; then exit 1; fi
 fi
@@ -99,10 +99,8 @@ function initialize_informatica {
     # Add repositories
     sudo add-apt-repository universe &&
     add-apt-repository -y ppa:uva-informatica/meta-packages &&
-    add-apt-repository -y ppa:uva-informatica/sim-pl &&
     # Load repositories
     apt-get -y update
-    block_amazon_launcher
 }
 
 function initialize_AI1 {
@@ -118,8 +116,7 @@ function initialize_AI1 {
                        fi' &&
 
    sudo add-apt-repository universe &&
-   apt-get -y update &&
-   block_amazon_launcher
+   apt-get -y update
 }
 
 # Install functions
@@ -144,18 +141,16 @@ function install_code {
     apt-get -y install apt-transport-https
     apt-get -y update
     apt-get -y install code # or code-insiders
-    
+
 }
 
 function install_python {
-    apt-get -y install python  python-pip  python-virtualenv
     apt-get -y install python3 python3-pip python3-virtualenv
     apt-get -y install jupyter python3-nltk
-    
+
 }
 
 function install_python_extra {
-    apt-get -y install python  python-pip  python-virtualenv
     apt-get -y install python3 python3-pip python3-virtualenv
     apt-get -y install  python3-numpy
     apt-get -y install  python3-scipy
@@ -204,7 +199,8 @@ function install_protege {
 function install_latex {
     # A selection of TeX Live packages
     # (texlive-fonts-recommended, texlive-latex-base, texlive-latex-recommended)
-    apt-get -y install texlive
+    # Maby also install the docs but we are somewhat timeconstraint
+    apt-get -y install texlive-latex-extra
 
 }
 
@@ -216,9 +212,8 @@ while true; do
         [1] ) # Set Informatica year 1&2 variables
             initialize="initialize_informatica"
             mandatory=(
-                "build-essential;apt-get -y install build-essential clang lldb expect"
+                "build-essential;apt-get -y install build-essential clang lldb expect clang-tools"
                 "Java;install_java"
-                "SIM-PL;apt-get -y install sim-pl"
                 "UvA-VPN;install_uvavpn"
                 "LaTeX;install_latex"
                 "UvA packages;apt-get -y install informatica-common informatica-jaar-1"
@@ -246,7 +241,7 @@ while true; do
                 "Weka;apt-get -y install weka"
                 "MySQL workbench;apt-get -y install mysql-workbench"
                 "Protege;install_protege"
-                
+
             )
             optional=(
                 "Chromium;apt-get -y install chromium-browser"

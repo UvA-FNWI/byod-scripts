@@ -99,6 +99,7 @@ function initialize_informatica {
     # Add repositories
     sudo add-apt-repository universe &&
     add-apt-repository -y ppa:uva-informatica/meta-packages &&
+    add-apt-repository -y ppa:uva-informatica/sim-pl &&
     # Load repositories
     apt-get -y update
 }
@@ -200,7 +201,7 @@ function install_latex {
     # A selection of TeX Live packages
     # (texlive-fonts-recommended, texlive-latex-base, texlive-latex-recommended)
     # Maby also install the docs but we are somewhat timeconstraint
-    apt-get -y install texlive-latex-extra
+    apt-get -y install texlive-latex-extra-doc
 
 }
 

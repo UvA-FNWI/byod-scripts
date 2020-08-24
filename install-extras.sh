@@ -189,6 +189,17 @@ function install_zoom {
      dpkg -i zoom_amd64.deb
 }
 
+function install_teams {
+
+curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+ 
+sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/ms-teams stable main" > /etc/apt/sources.list.d/teams.list'
+
+apt install teams
+
+}
+
+
 function install_protege {
     su $SUDO_USER -c "mkdir -p ~/programs;
                       cd ~/programs;
@@ -229,6 +240,7 @@ while true; do
                 "Python libraries;install_python_extra"
                 "Visual studio Code;install_code"
                 "Zoom ;install_zoom"
+                "teams ;install_teams"
             )
             optional=(
                 "Chromium;apt-get -y install chromium-browser"
@@ -251,6 +263,7 @@ while true; do
                 "MySQL workbench;apt-get -y install mysql-workbench"
                 "Protege;install_protege"
                 "Zoom ;install_zoom"
+                "teams ;install_teams"
 
             )
             optional=(

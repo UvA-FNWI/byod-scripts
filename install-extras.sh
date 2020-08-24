@@ -183,6 +183,11 @@ function install_r {
     apt-get -y install r-base
 }
 
+function install_zoom {
+     wget https://zoom.us/client/latest/zoom_amd64.deb
+     dpkg -i zoom_amd64.deb
+}
+
 function install_protege {
     su $SUDO_USER -c "mkdir -p ~/programs;
                       cd ~/programs;
@@ -222,6 +227,7 @@ while true; do
                 "Python;install_python"
                 "Python libraries;install_python_extra"
                 "Visual studio Code;install_code"
+                "Zoom ;install_zoom"
             )
             optional=(
                 "Chromium;apt-get -y install chromium-browser"
@@ -243,6 +249,7 @@ while true; do
                 "Weka;apt-get -y install weka"
                 "MySQL workbench;apt-get -y install mysql-workbench"
                 "Protege;install_protege"
+                "Zoom ;install_zoom"
 
             )
             optional=(

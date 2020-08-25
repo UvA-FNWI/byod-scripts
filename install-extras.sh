@@ -41,7 +41,7 @@ if [[ $SUDO_UID -eq 0 ]]; then
 fi
 
 if ! `lsb_release -c | grep -q focal`; then
-    echo "This script is recommended to be executed on a machine running Ubuntu 18.04 LTS"
+    echo "This script is recommended to be executed on a machine running Ubuntu 20.04 LTS"
     if ! check_answer "Do you wish to continue?"; then exit 1; fi
 fi
 

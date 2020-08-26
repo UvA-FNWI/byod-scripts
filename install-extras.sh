@@ -184,7 +184,7 @@ function install_r {
 }
 
 function install_zoom {
-     apt-get -y install libgl1-mesa-glx libgl1-mesa-glx libxcb-xtest0
+     apt-get -y install libgl1-mesa-glx libgl1-mesa-glx libxcb-xtest0 libegl1-mesa
      wget https://zoom.us/client/latest/zoom_amd64.deb
      dpkg -i zoom_amd64.deb
 }

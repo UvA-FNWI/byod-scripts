@@ -249,6 +249,7 @@ while true; do
             initialize="initialize_AI1"
             mandatory=(
                 "git;apt-get -y install git"
+                "curl;apt-get -y install curl"
                 "UvA-VPN;install_uvavpn"
                 "Prolog;install_prolog"
                 "Python;install_python"
@@ -260,7 +261,7 @@ while true; do
                 "Java;install_java"
                 "R;install_r"
                 "Weka;apt-get -y install weka"
-                "MySQL workbench;apt-get -y install mysql-workbench"
+                #"MySQL workbench;apt-get -y install mysql-workbench"
                 "Protege;install_protege"
                 "Zoom ;install_zoom"
                 "teams ;install_teams"

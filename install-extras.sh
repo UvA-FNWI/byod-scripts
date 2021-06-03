@@ -219,7 +219,7 @@ function install_latex {
     # A selection of TeX Live packages
     # (texlive-fonts-recommended, texlive-latex-base, texlive-latex-recommended)
     # Maby also install the docs but we are somewhat timeconstraint
-    apt-get -y install texlive-latex-extra-doc
+    #apt-get -y install texlive-latex-extra-doc
     apt-get -y install texlive-latex-extra
 
 }

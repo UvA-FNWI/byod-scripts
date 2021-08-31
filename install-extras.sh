@@ -152,7 +152,9 @@ function install_python {
             python3-numpy \
             python3-scipy \
             python3-matplotlib \
-            python3-willow
+            python3-willow \
+            python3-nltk \
+            jupyter
 }
 
 function install_sql {

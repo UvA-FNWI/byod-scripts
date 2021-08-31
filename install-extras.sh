@@ -142,23 +142,18 @@ function install_code {
     apt-get -y install apt-transport-https
     apt-get -y update
     apt-get -y install code # or code-insiders
-
 }
 
 function install_python {
-    apt-get -y install python3 python3-pip python3-virtualenv
-    apt-get -y install jupyter python3-nltk
-
+    apt-get -y install \
+            python3 \
+            python3-pip \
+            python3-virtualenv \
+            python3-numpy \
+            python3-scipy \
+            python3-matplotlib \
+            python3-willow
 }
-
-function install_python_extra {
-    apt-get -y install python3 python3-pip python3-virtualenv
-    apt-get -y install  python3-numpy
-    apt-get -y install  python3-scipy
-    apt-get -y install  python3-matplotlib
-    apt-get -y install  python3-willow
-}
-
 
 function install_sql {
     sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password your_password'
@@ -192,7 +187,6 @@ function install_zoom {
 function install_teams {
 
 wget -q -O - https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
- 
 sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/ms-teams stable main" > /etc/apt/sources.list.d/teams.list'
 
 apt update
@@ -238,7 +232,6 @@ while true; do
                 "LaTeX;install_latex"
                 "UvA packages;apt-get -y install informatica-common informatica-jaar-1"
                 "Python;install_python"
-                "Python libraries;install_python_extra"
                 "Visual studio Code;install_code"
                 "Zoom ;install_zoom"
                 "teams ;install_teams"
@@ -257,7 +250,6 @@ while true; do
                 "Atom;install_atom"
                 "LaTeX;install_latex"
                 "C essentials;apt-get -y install build-essential gcc valgrind"
-                "Python libraries;install_python_extra"
                 "SQL;install_sql"
                 "Java;install_java"
                 "R;install_r"

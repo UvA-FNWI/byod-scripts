@@ -192,7 +192,7 @@ function install_zoom {
 function install_teams {
 
 wget -q -O - https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
- 
+
 sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/ms-teams stable main" > /etc/apt/sources.list.d/teams.list'
 
 apt update
@@ -232,6 +232,7 @@ while true; do
         [1] ) # Set Informatica year 1&2 variables
             initialize="initialize_informatica"
             mandatory=(
+                "git;apt-get -y install git"
                 "build-essential;apt-get -y install build-essential clang lldb expect clang-tools"
                 "Java;install_java"
                 "UvA-VPN;install_uvavpn"

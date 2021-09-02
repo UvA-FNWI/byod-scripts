@@ -228,6 +228,7 @@ while true; do
         [1] ) # Set Informatica year 1&2 variables
             initialize="initialize_informatica"
             mandatory=(
+                "git;apt-get -y install git"
                 "build-essential;apt-get -y install build-essential clang lldb expect clang-tools"
                 "Java;install_java"
                 "UvA-VPN;install_uvavpn"

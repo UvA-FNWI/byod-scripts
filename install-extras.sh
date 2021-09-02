@@ -184,9 +184,8 @@ function install_r {
 }
 
 function install_zoom {
-     apt-get -y install libgl1-mesa-glx libgl1-mesa-glx libxcb-xtest0 libegl1-mesa
-     wget https://zoom.us/client/latest/zoom_amd64.deb
-     dpkg -i zoom_amd64.deb
+    apt-get install -y flatpak gnome-software-plugin-flatpak
+    flatpak install -y us.zoom.Zoom
 }
 
 function install_teams {

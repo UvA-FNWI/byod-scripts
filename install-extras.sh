@@ -191,15 +191,9 @@ function install_zoom {
 }
 
 function install_teams {
-
-wget -q -O - https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
-sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/ms-teams stable main" > /etc/apt/sources.list.d/teams.list'
-
-apt update
-apt install teams
-
+    install_flatpak
+    flatpak install -y com.microsoft.Teams
 }
-
 
 function install_protege {
     su $SUDO_USER -c "mkdir -p ~/programs;

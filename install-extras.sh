@@ -205,10 +205,9 @@ function install_protege {
 function install_latex {
     # A selection of TeX Live packages
     # (texlive-fonts-recommended, texlive-latex-base, texlive-latex-recommended)
-    # Maby also install the docs but we are somewhat timeconstraint
+    # Maybe also install the docs but we are somewhat time-constrained
     #apt-get -y install texlive-latex-extra-doc
     apt-get -y install texlive-latex-extra
-
 }
 
 echo "1) Informatica
@@ -226,9 +225,9 @@ while true; do
                 "LaTeX;install_latex"
                 "UvA packages;apt-get -y install informatica-common informatica-jaar-1"
                 "Python;install_python"
-                "Visual studio Code;install_code"
-                "Zoom ;install_zoom"
-                "teams ;install_teams"
+                "Visual Studio Code;install_code"
+                "Zoom;install_zoom"
+                "Microsoft Teams;install_teams"
             )
             optional=(
                 "Chromium;apt-get -y install chromium-browser"
@@ -250,9 +249,8 @@ while true; do
                 "Weka;apt-get -y install weka"
                 #"MySQL workbench;apt-get -y install mysql-workbench"
                 "Protege;install_protege"
-                "Zoom ;install_zoom"
-                "teams ;install_teams"
-
+                "Zoom;install_zoom"
+                "Microsoft Teams;install_teams"
             )
             optional=(
                 "Chromium;apt-get -y install chromium-browser"

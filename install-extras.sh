@@ -90,7 +90,7 @@ function install_uvavpn {
 
 function initialize_informatica {
     # Add repositories
-    sudo add-apt-repository universe &&
+    sudo add-apt-repository -y universe &&
     add-apt-repository -y ppa:uva-informatica/meta-packages &&
     add-apt-repository -y ppa:uva-informatica/sim-pl &&
     # Load repositories
@@ -109,7 +109,7 @@ function initialize_AI1 {
                          echo "alias e=emacs" >> ~/.bashrc;
                        fi' &&
 
-   sudo add-apt-repository universe &&
+   sudo add-apt-repository -y universe &&
    apt-get -y update
 }
 

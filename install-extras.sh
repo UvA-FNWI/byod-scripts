@@ -183,10 +183,14 @@ function install_r {
     apt-get -y install r-base
 }
 
+function install_flatpak {
+    apt-get install -y flatpak gnome-software-plugin-flatpak
+    flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+}
+
 function install_zoom {
-     apt-get -y install libgl1-mesa-glx libgl1-mesa-glx libxcb-xtest0 libegl1-mesa libxcb-xinerama0
-     wget https://zoom.us/client/latest/zoom_amd64.deb
-     dpkg -i zoom_amd64.deb
+    install_flatpak
+    flatpak install -y us.zoom.Zoom
 }
 
 function install_teams {

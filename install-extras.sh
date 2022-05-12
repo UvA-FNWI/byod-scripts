@@ -40,8 +40,8 @@ if [[ $SUDO_UID -eq 0 ]]; then
    exit 1
 fi
 
-if ! `lsb_release -c | grep -q focal`; then
-    echo "This script is recommended to be executed on a machine running Ubuntu 20.04 LTS"
+if ! `lsb_release -c | grep -q jammy`; then
+    echo "This script is recommended to be executed on a machine running Ubuntu 22.04 LTS"
     if ! check_answer "Do you wish to continue?"; then exit 1; fi
 fi
 
@@ -86,7 +86,6 @@ function install_uvavpn {
     vpn-type openconnect \
     -- \
     vpn.data "gateway=uvavpn.uva.nl,protocol=nc"
-
 }
 
 function initialize_informatica {

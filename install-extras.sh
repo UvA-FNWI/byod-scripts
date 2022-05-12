@@ -183,8 +183,13 @@ function install_r {
     apt-get -y install r-base
 }
 
-function install_zoom {
+function install_flatpak {
     apt-get install -y flatpak gnome-software-plugin-flatpak
+    flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+}
+
+function install_zoom {
+    install_flatpak
     flatpak install -y us.zoom.Zoom
 }
 

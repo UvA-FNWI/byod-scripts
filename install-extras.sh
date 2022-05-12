@@ -90,9 +90,9 @@ function install_uvavpn {
 
 function initialize_informatica {
     # Add repositories
-    sudo add-apt-repository -y universe &&
-    add-apt-repository -y ppa:uva-informatica/meta-packages &&
-    add-apt-repository -y ppa:uva-informatica/sim-pl &&
+    add-apt-repository -y universe
+    # add-apt-repository -y ppa:uva-informatica/meta-packages
+    add-apt-repository -y ppa:uva-informatica/sim-pl
     # Load repositories
     apt-get -y update
 }
@@ -223,7 +223,7 @@ while true; do
                 "Java;install_java"
                 "UvA-VPN;install_uvavpn"
                 # "LaTeX;install_latex"
-                "UvA packages;apt-get -y install informatica-common informatica-jaar-1"
+                # "UvA packages;apt-get -y install informatica-common informatica-jaar-1"
                 "Python;install_python"
                 "Visual Studio Code;install_code"
                 "Zoom;install_zoom"

@@ -89,12 +89,6 @@ function install_uvavpn {
 
 }
 
-function block_amazon_launcher {
-    sudo apt-get purge -yq ubuntu-web-launchers
-    # block the launchers from being installed in the future
-    sudo apt-mark hold ubuntu-web-launchers
-}
-
 function initialize_informatica {
     # Add repositories
     sudo add-apt-repository universe &&

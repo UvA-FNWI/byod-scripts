@@ -11,6 +11,10 @@ Made by:\n
  - L.A. van Hijfte\n
  - S.J.N. van den Broek\n
  - S.R.W. van Kampen\n
+ - R.K. Slot\n
+\n
+Source: https://gitlab-fnwi.uva.nl/byod/shell-scripts\n
+Contact: laptops-fnwi@uva.nl\n
  "
 LOGFILE="install_extras.log"
 
@@ -59,58 +63,58 @@ tput reset
 echo -e ${TITLE}
 > ${LOGFILE}
 
-function install_app {
-    app=$1
-    echo -ne "$2 Installing ${app%;*}..."
+function run_step {
+    step=$1
+    echo -ne "$2 Running: ${step%;*}..."
     echo -e "\n\n\n#############################################
 #############################################
-INSTALLING ${app%;*}
+RUNNING STEP: ${step%;*}
 #############################################
 #############################################\n" &>> ${LOGFILE}
-    ${app#*;} &>> ${LOGFILE}
+    ${step#*;} &>> ${LOGFILE}
     if [[ $? -ne 0 ]]; then
-        echo -e "\r$2 ${RED}Something went wrong when installing ${app%;*}.${RESET}"
+        echo -e "\r$2 ${RED}Something went wrong when running '${step%;*}'.${RESET}"
         if check_answer "Would you like to read the log file?"; then
             less ${LOGFILE}
         fi
     else
-        echo -e "\r$2 ${GREEN}Installed ${app%;*}${RESET}    "
+        # Spaces are required to fully overwrite the previous line
+        echo -e "\r$2 ${GREEN}Done: ${step%;*}${RESET}               "
     fi
 }
 
-function install_uvavpn {
-    apt-get -y install network-manager-openconnect-gnome
-    nmcli con add type vpn \
-    con-name "UvA VPN" \
-    ifname "*" \
-    vpn-type openconnect \
-    -- \
-    vpn.data "gateway=uvavpn.uva.nl,protocol=nc"
-}
-
-function initialize_informatica {
-    # Add repositories
+function add_universe_repository {
     add-apt-repository -y universe
-    # add-apt-repository -y ppa:uva-informatica/meta-packages
-    add-apt-repository -y ppa:uva-informatica/sim-pl
-    # Load repositories
-    apt-get -y update
 }
 
-function initialize_AI1 {
-    su $SUDO_USER -c ' mkdir -p ~/bin;
-                       if [ -z "`grep \"BscKI\" ~/.bashrc`" ]; then
-                         echo "" >> ~/.bashrc;
-                         echo "# byod BscKI settings" >> ~/.bashrc;
-                         echo "export PATH=\$PATH:~/bin" >> ~/.bashrc;
-                         echo "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/usr/local/lib" >> ~/.bashrc;
-                         echo "export EDITOR=/usr/bin/emacs" >> ~/.bashrc;
-                         echo "alias o=gnome-open" >> ~/.bashrc;
-                         echo "alias e=emacs" >> ~/.bashrc;
-                       fi' &&
+function install_uvavpn {
+    if [ -z "$(nmcli con | grep 'UvA')" ];
+    then
+        # Gnome settings adds "VPN" to the name, so while it is
+        # called just "UvA" here it will show up as "UvA VPN"
+        apt-get -y install network-manager-openconnect-gnome
+        nmcli con add type vpn \
+                con-name "UvA" \
+                ifname "*" \
+                vpn-type openconnect \
+                -- \
+                vpn.data "gateway=uvavpn.uva.nl,protocol=nc"
+    else
+        echo "UvA VPN already configured"
+    fi
+}
 
-   sudo add-apt-repository -y universe &&
-   apt-get -y update
+function install_ai_bashrc {
+    su $SUDO_USER -c ' mkdir -p ~/bin;
+                    if [ -z "`grep \"BscKI\" ~/.bashrc`" ]; then
+                        echo "" >> ~/.bashrc;
+                        echo "# byod BscKI settings" >> ~/.bashrc;
+                        echo "export PATH=\$PATH:~/bin" >> ~/.bashrc;
+                        echo "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/usr/local/lib" >> ~/.bashrc;
+                        echo "export EDITOR=/usr/bin/emacs" >> ~/.bashrc;
+                        echo "alias o=gnome-open" >> ~/.bashrc;
+                        echo "alias e=emacs" >> ~/.bashrc;
+                    fi'
 }
 
 # Install functions
@@ -179,12 +183,10 @@ function install_flatpak {
 }
 
 function install_zoom {
-    install_flatpak
     flatpak install -y us.zoom.Zoom
 }
 
 function install_teams {
-    install_flatpak
     flatpak install -y com.microsoft.Teams
 }
 
@@ -202,12 +204,38 @@ function install_protege {
                       chmod +x protege;"
 }
 
-function install_latex {
-    # A selection of TeX Live packages
-    # (texlive-fonts-recommended, texlive-latex-base, texlive-latex-recommended)
-    # Maybe also install the docs but we are somewhat time-constrained
-    #apt-get -y install texlive-latex-extra-doc
-    apt-get -y install texlive-latex-extra
+# function install_latex {
+#     # A selection of TeX Live packages
+#     # (texlive-fonts-recommended, texlive-latex-base, texlive-latex-recommended)
+#     # Maybe also install the docs but we are somewhat time-constrained
+#     #apt-get -y install texlive-latex-extra-doc
+#     apt-get -y install texlive-latex-extra
+# }
+
+function install_sim_pl {
+    # it's fine if this runs twice, add-apt-repository checks if already present in sources
+    add-apt-repository -y ppa:uva-informatica/sim-pl
+    apt-get -y install sim-pl
+}
+
+function install_c_tools {
+    apt-get -y install build-essential clang lldb expect clang-tools valgrind gcc
+}
+
+function install_git {
+    apt-get -y install git
+}
+
+function install_chromium {
+    sudo snap install chromium
+}
+
+function apt_upgrade {
+    DEBIAN_FRONTEND=noninteractive apt-get -yq upgrade &>> ${LOGFILE}
+}
+
+function apt_autoremove {
+    DEBIAN_FRONTEND=noninteractive apt-get -yq autoremove &>> ${LOGFILE}
 }
 
 echo "1) Informatica
@@ -216,44 +244,51 @@ while true; do
     read -p "Which of the above listed items fits you the best? " answer
     case $answer in
         [1] ) # Set Informatica year 1&2 variables
-            initialize="initialize_informatica"
             mandatory=(
-                "git;apt-get -y install git"
-                "build-essential;apt-get -y install build-essential clang lldb expect clang-tools"
-                "Java;install_java"
-                "UvA-VPN;install_uvavpn"
+                "Add Universe repository;add_universe_repository"
+                "Install Git;install_git"
+                "Install C build tools;install_c_tools"
+                "Set up UvA-VPN;install_uvavpn"
+                "Install Python and extensions;install_python"
+                "Visual Studio Code;install_code"
+                "Install Flatpak;install_flatpak"
+                "Install Zoom;install_zoom"
+                "Install Microsoft Teams;install_teams"
+                "Upgrade packages;apt_upgrade"
+                "Remove unneeded packages;apt_autoremove"
+                # "Java;install_java"
                 # "LaTeX;install_latex"
                 # "UvA packages;apt-get -y install informatica-common informatica-jaar-1"
-                "Python;install_python"
-                "Visual Studio Code;install_code"
-                "Zoom;install_zoom"
-                "Microsoft Teams;install_teams"
             )
             optional=(
-                "Chromium;apt-get -y install chromium-browser"
+                "install Chromium browser (open source base for Google Chrome);install_chromium"
             ); break;;
         [2] ) # Set Artificial Intelligence year 1 variables
-            initialize="initialize_AI1"
             mandatory=(
-                "git;apt-get -y install git"
-                "curl;apt-get -y install curl"
-                "UvA-VPN;install_uvavpn"
-                "Prolog;install_prolog"
-                "Python;install_python"
-                "Atom;install_atom"
+                "Add Universe repository;add_universe_repository"
+                "Install Git;install_git"
+                "Install C build tools;install_c_tools"
+                "Set up UvA-VPN;install_uvavpn"
+                "Install Python and extensions;install_python"
+                "Install curl;apt-get -y install curl"
+                "Add .bashrc configuration;install_ai_bashrc"
+                "Install Prolog;install_prolog"
+                "Install SQL tools;install_sql"
+                "Install Protege;install_protege"
+                "Install R;install_r"
+                "Install Weka;apt-get -y install weka"
+                "Install Visual Studio Code;install_code"
+                "Install Flatpak;install_flatpak"
+                "Install Zoom;install_zoom"
+                "Install Microsoft Teams;install_teams"
+                "Upgrade packages;apt_upgrade"
+                "Remove unneeded packages;apt_autoremove"
+                # "Atom;install_atom"
                 # "LaTeX;install_latex"
-                "C essentials;apt-get -y install build-essential gcc valgrind"
-                "SQL;install_sql"
-                "Java;install_java"
-                "R;install_r"
-                "Weka;apt-get -y install weka"
-                #"MySQL workbench;apt-get -y install mysql-workbench"
-                "Protege;install_protege"
-                "Zoom;install_zoom"
-                "Microsoft Teams;install_teams"
+                # "Java;install_java"
             )
             optional=(
-                "Chromium;apt-get -y install chromium-browser"
+                "install Chromium browser (open source base for Google Chrome);install_chromium"
             ); break;;
         * ) echo "Please answer with 1 or 2";;
     esac
@@ -261,23 +296,18 @@ done
 tput reset
 echo -e ${TITLE}
 
-echo -ne "Initializing..."
-$initialize &>> ${LOGFILE}
-echo -e "\rInstalling packages:"
+echo -e "\rStarting installation..."
 
-total=$(( ${#mandatory[@]} + ${#optional[@]} + 1 ))
+total=$(( ${#mandatory[@]} + ${#optional[@]} ))
 for ((i=0; i < ${#mandatory[@]}; i++)) do
-    install_app "${mandatory[$i]}" "[$((i + 1))/$total]"
+    run_step "${mandatory[$i]}" "[$((i + 1))/$total]"
 done
 
 for ((i=0; i < ${#optional[@]}; i++)) do
     tag=[$((i + ${#mandatory[@]} + ${#optional[@]}))/$total]
-    if check_answer "$tag Would you like to install ${optional[$i]%;*} (optional)?"; then
-        install_app "${optional[$i]}" "$tag"
+    if check_answer "$tag Would you like to ${optional[$i]%;*} (optional)?"; then
+        run_step "${optional[$i]}" "$tag"
     fi
 done
 
-echo -n "[${total}/${total}] Upgrading packages"
-DEBIAN_FRONTEND=noninteractive apt-get -yq upgrade &>> ${LOGFILE}
-echo -e "\r[${total}/${total}] ${GREEN}Packages upgraded ${RESET}"
-echo "${GREEN}Finished!${RESET} If nothing went wrong, you can reboot your computer."
+echo "${GREEN}Finished!${RESET} If nothing went wrong, you can shut down your computer or start using it."

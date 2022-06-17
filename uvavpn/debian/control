@@ -1,0 +1,14 @@
+Source: uvavpn
+Section: net
+Priority: optional
+Maintainer: Robin de Vries <robin@celp.nl>
+Build-Depends: debhelper (>= 8.0.0)
+Standards-Version: 3.9.4
+Homepage: https://launchpad.net/~uva-informatica/+archive/uvavpn
+#Vcs-Git: git://git.debian.org/collab-maint/uvavpn.git
+#Vcs-Browser: http://git.debian.org/?p=collab-maint/uvavpn.git;a=summary
+
+Package: uvavpn
+Architecture: amd64
+Depends: lib32z1 (>= 1:1.1.4), libc6-i386 (>= 2.3.2)
+Description: VPN client for connecting to the VPN network of the University of Amsterdam.

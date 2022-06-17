@@ -1,0 +1,15 @@
+Source: uvalatex
+Section: education
+Priority: optional
+Maintainer: Erik Kooistra <deb@erikkooistra.nl>
+Build-Depends: debhelper (>= 10)
+Standards-Version: 4.1.2
+Homepage: https://gitlab-fnwi.uva.nl/informatica/LaTeX-template/tree/master 
+#Vcs-Git: https://anonscm.debian.org/git/collab-maint/uvalatex.git
+#Vcs-Browser: https://anonscm.debian.org/cgit/collab-maint/uvalatex.git
+
+Package: uvalatex
+Architecture: all
+Depends: ${misc:Depends}
+Description: <insert up to 60 chars description>
+ <insert long description, indented with spaces>

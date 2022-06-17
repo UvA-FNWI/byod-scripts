@@ -1,0 +1,7 @@
+templates/* /usr/share/uvalatex/templates
+images/*    /usr/share/texmf/tex/latex/uvalatex/images
+classes/*   /usr/share/texmf/tex/latex/uvalatex/classes
+bin/* /usr/bin/
+uvalatex /usr/share/bash-completion/completions/
+
+

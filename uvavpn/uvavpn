@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Author: Robin de Vries
+# Date: 04/08/2017
+
+read -e -p "UvAnetID: " uvanetid
+
+/opt/uvavpn/ncsvc -h uvavpn.uva.nl -u $uvanetid -r users -f /opt/uvavpn/certificaat-uvavpn.der

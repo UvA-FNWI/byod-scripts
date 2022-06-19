@@ -190,6 +190,11 @@ function install_teams {
     flatpak install -y com.microsoft.Teams
 }
 
+function install_wfh {
+    install_zoom
+    install_teams
+}
+
 function install_protege {
     su $SUDO_USER -c "mkdir -p ~/programs;
                       cd ~/programs;
@@ -252,8 +257,6 @@ while true; do
                 "Install Python and extensions;install_python"
                 "Visual Studio Code;install_code"
                 "Install Flatpak;install_flatpak"
-                "Install Zoom;install_zoom"
-                "Install Microsoft Teams;install_teams"
                 "Upgrade packages;apt_upgrade"
                 "Remove unneeded packages;apt_autoremove"
                 # "Java;install_java"
@@ -262,6 +265,7 @@ while true; do
             )
             optional=(
                 "install Chromium browser (open source base for Google Chrome);install_chromium"
+                "install Zoom and Microsoft Teams (flatpak);install_wfh"
             ); break;;
         [2] ) # Set Artificial Intelligence year 1 variables
             mandatory=(
@@ -279,8 +283,6 @@ while true; do
                 "Install Weka;apt-get -y install weka"
                 "Install Visual Studio Code;install_code"
                 "Install Flatpak;install_flatpak"
-                "Install Zoom;install_zoom"
-                "Install Microsoft Teams;install_teams"
                 "Upgrade packages;apt_upgrade"
                 "Remove unneeded packages;apt_autoremove"
                 # "Atom;install_atom"
@@ -289,6 +291,7 @@ while true; do
             )
             optional=(
                 "install Chromium browser (open source base for Google Chrome);install_chromium"
+                "install Zoom and Microsoft Teams (flatpak);install_wfh"
             ); break;;
         * ) echo "Please answer with 1 or 2";;
     esac

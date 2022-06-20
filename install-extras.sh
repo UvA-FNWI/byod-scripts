@@ -1,21 +1,21 @@
 #!/usr/bin/env bash
-TITLE="\n
-Installation script\n
-University of Amsterdam\n
-\n
-Made by:\n
- - E.M. Kooistra\n
- - S.J.R. van Schaik\n
- - R. de Vries\n
- - B. Terwijn\n
- - L.A. van Hijfte\n
- - S.J.N. van den Broek\n
- - S.R.W. van Kampen\n
- - R.K. Slot\n
-\n
-Source: https://gitlab-fnwi.uva.nl/byod/shell-scripts\n
-Contact: laptops-fnwi@uva.nl\n
- "
+TITLE="
+Installation script
+University of Amsterdam
+
+Made by:
+ - E.M. Kooistra
+ - S.J.R. van Schaik
+ - R. de Vries
+ - B. Terwijn
+ - L.A. van Hijfte
+ - S.J.N. van den Broek
+ - S.R.W. van Kampen
+ - R.K. Slot
+
+Source: https://github.com/UvA-FNWI/byod-scripts
+Contact: laptops-fnwi@uva.nl
+"
 LOGFILE="install_extras.log"
 
 function check_answer {
@@ -51,21 +51,23 @@ fi
 
 # Sets colors if supported else they are empty.
 if [ $(bc <<< "`(tput colors) 2>/dev/null || echo 0` >= 8") -eq 1 ]; then
-    RED=`tput setaf 1`
-    GREEN=`tput setaf 2`
-    YELLOW=`tput setaf 3`
-    BLUE=`tput setaf 4`
-    BOLD=`tput bold`
-    RESET=`tput sgr0`
+    RED=$(tput setaf 1)
+    GREEN=$(tput setaf 2)
+    YELLOW=$(tput setaf 11)
+    BLUE=$(tput setaf 4)
+    BOLD=$(tput bold)
+    RESET=$(tput sgr0)
 fi
 
 tput reset
-echo -e ${TITLE}
-> ${LOGFILE}
+echo -e "${TITLE}"
+echo "Starting installation" > ${LOGFILE}
 
 function run_step {
     step=$1
-    echo -ne "$2 Running: ${step%;*}..."
+    index=$2
+    total=$3
+    echo -ne "${YELLOW}[$index/$total]${RESET} Running: ${step%;*}..."
     echo -e "\n\n\n#############################################
 #############################################
 RUNNING STEP: ${step%;*}
@@ -73,13 +75,13 @@ RUNNING STEP: ${step%;*}
 #############################################\n" &>> ${LOGFILE}
     ${step#*;} &>> ${LOGFILE}
     if [[ $? -ne 0 ]]; then
-        echo -e "\r$2 ${RED}Something went wrong when running '${step%;*}'.${RESET}"
+        echo -e "\r[$index/$total] ${RED}Something went wrong when running '${step%;*}'.${RESET}"
         if check_answer "Would you like to read the log file?"; then
             less ${LOGFILE}
         fi
     else
         # Spaces are required to fully overwrite the previous line
-        echo -e "\r$2 ${GREEN}Done: ${step%;*}${RESET}               "
+        echo -e "\r${YELLOW}[$index/$total] ${GREEN}Done: ${step%;*}${RESET}               "
     fi
 }
 
@@ -105,26 +107,26 @@ function install_uvavpn {
 }
 
 function install_ai_bashrc {
-    su $SUDO_USER -c ' mkdir -p ~/bin;
-                    if [ -z "`grep \"BscKI\" ~/.bashrc`" ]; then
-                        echo "" >> ~/.bashrc;
-                        echo "# byod BscKI settings" >> ~/.bashrc;
-                        echo "export PATH=\$PATH:~/bin" >> ~/.bashrc;
-                        echo "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/usr/local/lib" >> ~/.bashrc;
-                        echo "export EDITOR=/usr/bin/emacs" >> ~/.bashrc;
-                        echo "alias o=gnome-open" >> ~/.bashrc;
-                        echo "alias e=emacs" >> ~/.bashrc;
-                    fi'
+    su" $SUDO_USER" -c ' mkdir -p ~/bin;
+if [ -z "`grep \"BscKI\" ~/.bashrc`" ]; then
+    echo "" >> ~/.bashrc;
+    echo "# byod BscKI settings" >> ~/.bashrc;
+    echo "export PATH=\$PATH:~/bin" >> ~/.bashrc;
+    echo "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:/usr/local/lib" >> ~/.bashrc;
+    echo "export EDITOR=/usr/bin/emacs" >> ~/.bashrc;
+    echo "alias o=gnome-open" >> ~/.bashrc;
+    echo "alias e=emacs" >> ~/.bashrc;
+fi'
 }
 
 # Install functions
 function install_prolog {
     apt-get -y install swi-prolog emacs emacs-goodies-extra-el
 
-    su $SUDO_USER -c ' echo "(setq auto-mode-alist (cons (cons \"\\\\.pl\" '\''prolog-mode) auto-mode-alist))" >> ~/.emacs '
-    su $SUDO_USER -c ' echo "(require '\''color-theme)" >> ~/.emacs '
-    su $SUDO_USER -c ' echo "(eval-after-load \"color-theme\" '\''(progn (color-theme-initialize) (color-theme-dark-laptop)))" >> ~/.emacs '
-    su $SUDO_USER -c ' echo "(show-paren-mode 1)" >> ~/.emacs '
+    su "$SUDO_USER" -c ' echo "(setq auto-mode-alist (cons (cons \"\\\\.pl\" '\''prolog-mode) auto-mode-alist))" >> ~/.emacs '
+    su "$SUDO_USER" -c ' echo "(require '\''color-theme)" >> ~/.emacs '
+    su "$SUDO_USER" -c ' echo "(eval-after-load \"color-theme\" '\''(progn (color-theme-initialize) (color-theme-dark-laptop)))" >> ~/.emacs '
+    su "$SUDO_USER" -c ' echo "(show-paren-mode 1)" >> ~/.emacs '
 }
 
 function install_java {
@@ -196,17 +198,17 @@ function install_wfh {
 }
 
 function install_protege {
-    su $SUDO_USER -c "mkdir -p ~/programs;
-                      cd ~/programs;
-                      rm -rf ./Protege-5.2.0*;
-                      wget http://sbt.science.uva.nl/boydki_software/Protege-5.2.0-linux.tar.gz;
-                      tar -xf Protege-5.2.0-linux.tar.gz;
-                      mkdir -p ~/bin
-                      cd ~/bin;
-                      echo \#\!/bin/bash > protege;
-                      echo \"cd ~/programs/Protege-5.2.0\" >> protege;
-                      echo \"./run.sh\" >> protege;
-                      chmod +x protege;"
+    su "$SUDO_USER" -c "mkdir -p ~/programs;
+                        cd ~/programs;
+                        rm -rf ./Protege-5.2.0*;
+                        wget http://sbt.science.uva.nl/boydki_software/Protege-5.2.0-linux.tar.gz;
+                        tar -xf Protege-5.2.0-linux.tar.gz;
+                        mkdir -p ~/bin
+                        cd ~/bin;
+                        echo \#\!/bin/bash > protege;
+                        echo \"cd ~/programs/Protege-5.2.0\" >> protege;
+                        echo \"./run.sh\" >> protege;
+                        chmod +x protege;"
 }
 
 # function install_latex {
@@ -235,6 +237,22 @@ function install_chromium {
     sudo snap install chromium
 }
 
+function install_firefox_deb {
+    if snap info firefox | grep -q "installed"; then
+        cat << EOF > /etc/apt/preferences.d/firefox-no-snap
+Package: firefox*
+Pin: release o=Ubuntu*
+Pin-Priority: -1
+EOF
+        apt-get remove -y firefox
+        snap remove firefox
+        add-apt-repository -y ppa:mozillateam/ppa
+        apt-get install -y firefox
+    else
+        echo "Skipping, firefox snap not installed"
+    fi
+}
+
 function apt_upgrade {
     DEBIAN_FRONTEND=noninteractive apt-get -yq upgrade &>> ${LOGFILE}
 }
@@ -259,13 +277,11 @@ while true; do
                 "Install Flatpak;install_flatpak"
                 "Upgrade packages;apt_upgrade"
                 "Remove unneeded packages;apt_autoremove"
-                # "Java;install_java"
-                # "LaTeX;install_latex"
-                # "UvA packages;apt-get -y install informatica-common informatica-jaar-1"
             )
             optional=(
                 "install Chromium browser (open source base for Google Chrome);install_chromium"
                 "install Zoom and Microsoft Teams (flatpak);install_wfh"
+                "replace Firefox snap with deb from Mozilla ppa;install_firefox_deb"
             ); break;;
         [2] ) # Set Artificial Intelligence year 1 variables
             mandatory=(
@@ -285,32 +301,42 @@ while true; do
                 "Install Flatpak;install_flatpak"
                 "Upgrade packages;apt_upgrade"
                 "Remove unneeded packages;apt_autoremove"
-                # "Atom;install_atom"
-                # "LaTeX;install_latex"
-                # "Java;install_java"
             )
             optional=(
                 "install Chromium browser (open source base for Google Chrome);install_chromium"
                 "install Zoom and Microsoft Teams (flatpak);install_wfh"
+                "replace Firefox snap with deb from Mozilla ppa;install_firefox_deb"
             ); break;;
         * ) echo "Please answer with 1 or 2";;
     esac
 done
 tput reset
-echo -e ${TITLE}
+echo -e "${TITLE}"
 
 echo -e "\rStarting installation..."
+echo
 
-total=$(( ${#mandatory[@]} + ${#optional[@]} ))
-for ((i=0; i < ${#mandatory[@]}; i++)) do
-    run_step "${mandatory[$i]}" "[$((i + 1))/$total]"
+# Total number of steps
+mandatory_steps=${#mandatory[@]}
+optional_steps=${#optional[@]}
+total_steps=$(( mandatory_steps + optional_steps ))
+
+# Run mandatory steps
+for i in "${!mandatory[@]}"; do
+    step=${mandatory[$i]}
+    current_step_number=$(( 1 + i ))
+    run_step "$step" $current_step_number $total_steps
 done
 
-for ((i=0; i < ${#optional[@]}; i++)) do
-    tag=[$((i + ${#mandatory[@]} + ${#optional[@]}))/$total]
-    if check_answer "$tag Would you like to ${optional[$i]%;*} (optional)?"; then
-        run_step "${optional[$i]}" "$tag"
+# Run optional steps
+for i in "${!optional[@]}"; do
+    step=${optional[$i]}
+    description=${step%;*} # extract part before semicolon
+    current_step_number=$(( 1 + mandatory_steps + i ))
+    if check_answer "${YELLOW}[$current_step_number/$total_steps]${RESET} Optional: Would you like to $description?"; then
+        run_step "$step" $current_step_number $total_steps
     fi
 done
 
-echo "${GREEN}Finished!${RESET} If nothing went wrong, you can shut down your computer or start using it."
+echo
+echo "${GREEN}${BOLD}Finished!${RESET} If nothing went wrong, you can shut down your computer or start using it."

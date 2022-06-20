@@ -135,12 +135,16 @@ function install_java {
 }
 
 function install_code {
-    wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
-    mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
-    sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
-    apt-get -y install apt-transport-https
-    apt-get -y update
-    apt-get -y install code # or code-insiders
+    if dpkg -l code; then
+        echo "Skipping, Visual Studio Code already installed"
+    else
+        wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
+        mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
+        sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
+        apt-get -y install apt-transport-https
+        apt-get -y update
+        apt-get -y install code # or code-insiders
+    fi
 }
 
 function install_python {

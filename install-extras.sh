@@ -252,6 +252,8 @@ EOF
         snap remove firefox
         add-apt-repository -y ppa:mozillateam/ppa
         apt-get install -y firefox
+        # Add back to GNOME panel favorites
+        gsettings set org.gnome.shell favorite-apps "$(gsettings get org.gnome.shell favorite-apps | sed s/.$//), 'firefox.desktop']"
     else
         echo "Skipping, firefox snap not installed"
     fi

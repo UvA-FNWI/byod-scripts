@@ -288,6 +288,7 @@ while true; do
                 "Install Python and extensions;install_python"
                 "Visual Studio Code;install_code"
                 "Install Flatpak;install_flatpak"
+                "Install SIM-PL;install_sim_pl"
                 "Upgrade packages;apt_upgrade"
                 "Remove unneeded packages;apt_autoremove"
                 "replace Firefox snap with deb from Mozilla;install_firefox_deb"

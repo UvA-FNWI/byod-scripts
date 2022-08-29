@@ -242,6 +242,13 @@ function install_chromium {
 }
 
 function install_firefox_deb {
+    # At least for now, the Firefox snap starts very slowly, even on powerful machines. On slower
+    # laptops, with SSD, it can take nearly a minute. In addition, there are issues with browser
+    # extensions that use native communication, like password managers.
+
+    # Receiving timely security updates for a browser is extremely important, so we don't want to use
+    # an unofficial distribution or manually download a package that won't be updated by students. This
+    # PPA seems to be official and provides immediate updates for all supported Ubuntu releases.
     if snap info firefox | grep -q "installed"; then
         cat << EOF > /etc/apt/preferences.d/firefox-no-snap
 Package: firefox*
@@ -283,11 +290,11 @@ while true; do
                 "Install Flatpak;install_flatpak"
                 "Upgrade packages;apt_upgrade"
                 "Remove unneeded packages;apt_autoremove"
+                "replace Firefox snap with deb from Mozilla;install_firefox_deb"
             )
             optional=(
                 "install Chromium browser (open source base for Google Chrome);install_chromium"
                 "install Zoom and Microsoft Teams (flatpak);install_wfh"
-                "replace Firefox snap with deb from Mozilla ppa;install_firefox_deb"
             ); break;;
         [2] ) # Set Artificial Intelligence year 1 variables
             mandatory=(
@@ -307,11 +314,11 @@ while true; do
                 "Install Flatpak;install_flatpak"
                 "Upgrade packages;apt_upgrade"
                 "Remove unneeded packages;apt_autoremove"
+                "replace Firefox snap with deb from Mozilla;install_firefox_deb"
             )
             optional=(
                 "install Chromium browser (open source base for Google Chrome);install_chromium"
                 "install Zoom and Microsoft Teams (flatpak);install_wfh"
-                "replace Firefox snap with deb from Mozilla ppa;install_firefox_deb"
             ); break;;
         * ) echo "Please answer with 1 or 2";;
     esac

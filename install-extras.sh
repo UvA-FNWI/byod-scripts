@@ -229,6 +229,11 @@ function install_sim_pl {
     apt-get -y install sim-pl
 }
 
+function install_vivado {
+    add-apt-repository -y ppa:uva-informatica/meta-packages
+    apt-get -y install 5062arco6y
+}
+
 function install_c_tools {
     apt-get -y install build-essential clang lldb expect clang-tools valgrind gcc
 }
@@ -289,6 +294,7 @@ while true; do
                 "Visual Studio Code;install_code"
                 "Install Flatpak;install_flatpak"
                 "Install SIM-PL;install_sim_pl"
+                "Install Vivado;install_vivado"
                 "Upgrade packages;apt_upgrade"
                 "Remove unneeded packages;apt_autoremove"
                 "replace Firefox snap with deb from Mozilla;install_firefox_deb"

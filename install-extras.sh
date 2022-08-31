@@ -107,7 +107,7 @@ function install_uvavpn {
 }
 
 function install_ai_bashrc {
-    su" $SUDO_USER" -c ' mkdir -p ~/bin;
+    su "$SUDO_USER" -c ' mkdir -p ~/bin;
 if [ -z "`grep \"BscKI\" ~/.bashrc`" ]; then
     echo "" >> ~/.bashrc;
     echo "# byod BscKI settings" >> ~/.bashrc;

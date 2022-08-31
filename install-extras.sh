@@ -314,7 +314,7 @@ while true; do
                 "Add .bashrc configuration;install_ai_bashrc"
                 "Install Prolog;install_prolog"
                 "Install SQL tools;install_sql"
-                "Install Protege;install_protege"
+                # "Install Protege;install_protege"
                 "Install R;install_r"
                 "Install Weka;apt-get -y install weka"
                 "Install Visual Studio Code;install_code"

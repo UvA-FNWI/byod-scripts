@@ -44,7 +44,7 @@ if [[ $SUDO_UID -eq 0 ]]; then
    exit 1
 fi
 
-if ! `lsb_release -c | grep -q jammy`; then
+if ! lsb_release -c | grep -q jammy; then
     echo "This script is recommended to be executed on a machine running Ubuntu 22.04 LTS"
     if ! check_answer "Do you wish to continue?"; then exit 1; fi
 fi
@@ -264,8 +264,13 @@ EOF
         snap remove firefox
         add-apt-repository -y ppa:mozillateam/ppa
         apt-get install -y firefox
-        # Add back to GNOME panel favorites
-        gsettings set org.gnome.shell favorite-apps "$(gsettings get org.gnome.shell favorite-apps | sed s/.$//), 'firefox.desktop']"
+        if command -v gsettings &> /dev/null
+        then
+            # Add back to GNOME panel favorites
+            gsettings set org.gnome.shell favorite-apps "$(gsettings get org.gnome.shell favorite-apps | sed s/.$//), 'firefox.desktop']"
+        else
+            echo "gsettings not available, Ubuntu with different desktop environment?"
+        fi
     else
         echo "Skipping, firefox snap not installed"
     fi

@@ -30,7 +30,7 @@ function check_answer {
 }
 
 if [[ $EUID -ne 0 ]]; then
-    sudo $0
+    sudo $0 $@
     exit $?
 fi
 
@@ -196,11 +196,6 @@ function install_teams {
     flatpak install -y com.microsoft.Teams
 }
 
-function install_wfh {
-    install_zoom
-    install_teams
-}
-
 function install_protege {
     su "$SUDO_USER" -c "mkdir -p ~/programs;
                         cd ~/programs;
@@ -302,11 +297,11 @@ while true; do
                 "Install Vivado;install_vivado"
                 "Upgrade packages;apt_upgrade"
                 "Remove unneeded packages;apt_autoremove"
-                "replace Firefox snap with deb from Mozilla;install_firefox_deb"
+                "Replace Firefox snap with deb from Mozilla;install_firefox_deb"
             )
             optional=(
                 "install Chromium browser (open source base for Google Chrome);install_chromium"
-                "install Zoom and Microsoft Teams (flatpak);install_wfh"
+                "install Zoom (flatpak);install_zoom"
             ); break;;
         [2] ) # Set Artificial Intelligence year 1 variables
             mandatory=(
@@ -326,16 +321,16 @@ while true; do
                 "Install Flatpak;install_flatpak"
                 "Upgrade packages;apt_upgrade"
                 "Remove unneeded packages;apt_autoremove"
-                "replace Firefox snap with deb from Mozilla;install_firefox_deb"
+                "Replace Firefox snap with deb from Mozilla;install_firefox_deb"
             )
             optional=(
                 "install Chromium browser (open source base for Google Chrome);install_chromium"
-                "install Zoom and Microsoft Teams (flatpak);install_wfh"
+                "install Zoom (flatpak);install_zoom"
             ); break;;
         * ) echo "Please answer with 1 or 2";;
     esac
 done
-tput reset
+# tput reset
 echo -e "${TITLE}"
 
 echo -e "\rStarting installation..."
@@ -346,12 +341,26 @@ mandatory_steps=${#mandatory[@]}
 optional_steps=${#optional[@]}
 total_steps=$(( mandatory_steps + optional_steps ))
 
-# Run mandatory steps
-for i in "${!mandatory[@]}"; do
-    step=${mandatory[$i]}
-    current_step_number=$(( 1 + i ))
-    run_step "$step" $current_step_number $total_steps
-done
+if [ "$1" = "optional" ]
+then
+    echo "Mandatory steps will be treated as optional steps"
+    # Run mandatory steps like optional steps
+    for i in "${!mandatory[@]}"; do
+        step=${mandatory[$i]}
+        description=${step%;*} # extract part before semicolon
+        current_step_number=$(( 1 + i ))
+        if check_answer "${YELLOW}[$current_step_number/$total_steps]${RESET} Optional: Would you like to: $description?"; then
+            run_step "$step" $current_step_number $total_steps
+        fi
+    done
+else
+    # Run mandatory steps
+    for i in "${!mandatory[@]}"; do
+        step=${mandatory[$i]}
+        current_step_number=$(( 1 + i ))
+        run_step "$step" $current_step_number $total_steps
+    done
+fi
 
 # Run optional steps
 for i in "${!optional[@]}"; do

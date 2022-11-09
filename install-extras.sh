@@ -100,7 +100,7 @@ function install_uvavpn {
                 ifname "*" \
                 vpn-type openconnect \
                 -- \
-                vpn.data "gateway=uvavpn.uva.nl,protocol=nc"
+                vpn.data "gateway=vpn.uva.nl,protocol=nc"
     else
         echo "UvA VPN already configured"
     fi
@@ -189,10 +189,12 @@ function install_flatpak {
 }
 
 function install_zoom {
+    install_flatpak
     flatpak install -y us.zoom.Zoom
 }
 
 function install_teams {
+    install_flatpak
     flatpak install -y com.microsoft.Teams
 }
 

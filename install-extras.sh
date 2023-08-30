@@ -296,13 +296,13 @@ while true; do
                 "Visual Studio Code;install_code"
                 "Install Flatpak;install_flatpak"
                 "Install SIM-PL;install_sim_pl"
-                "Install Vivado;install_vivado"
-                "Upgrade packages;apt_upgrade"
+                # "Install Vivado;install_vivado"
+                # "Upgrade packages;apt_upgrade"
                 "Remove unneeded packages;apt_autoremove"
                 "Replace Firefox snap with deb from Mozilla;install_firefox_deb"
             )
             optional=(
-                "install Chromium browser (open source base for Google Chrome);install_chromium"
+                # "install Chromium browser (open source base for Google Chrome);install_chromium"
                 "install Zoom (flatpak);install_zoom"
             ); break;;
         [2] ) # Set Artificial Intelligence year 1 variables
@@ -321,12 +321,12 @@ while true; do
                 "Install Weka;apt-get -y install weka"
                 "Install Visual Studio Code;install_code"
                 "Install Flatpak;install_flatpak"
-                "Upgrade packages;apt_upgrade"
+                # "Upgrade packages;apt_upgrade"
                 "Remove unneeded packages;apt_autoremove"
                 "Replace Firefox snap with deb from Mozilla;install_firefox_deb"
             )
             optional=(
-                "install Chromium browser (open source base for Google Chrome);install_chromium"
+                # "install Chromium browser (open source base for Google Chrome);install_chromium"
                 "install Zoom (flatpak);install_zoom"
             ); break;;
         * ) echo "Please answer with 1 or 2";;

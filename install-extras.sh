@@ -304,6 +304,7 @@ while true; do
             optional=(
                 # "install Chromium browser (open source base for Google Chrome);install_chromium"
                 "install Zoom (flatpak);install_zoom"
+                "install Microsoft Teams (flatpak);install_teams"
             ); break;;
         [2] ) # Set Artificial Intelligence year 1 variables
             mandatory=(
@@ -328,6 +329,7 @@ while true; do
             optional=(
                 # "install Chromium browser (open source base for Google Chrome);install_chromium"
                 "install Zoom (flatpak);install_zoom"
+                "install Microsoft Teams (flatpak);install_teams"
             ); break;;
         * ) echo "Please answer with 1 or 2";;
     esac

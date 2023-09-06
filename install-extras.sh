@@ -87,6 +87,7 @@ RUNNING STEP: ${step%;*}
 
 function add_universe_repository {
     add-apt-repository -y universe
+    apt update
 }
 
 function install_uvavpn {

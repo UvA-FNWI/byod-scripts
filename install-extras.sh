@@ -45,7 +45,7 @@ if [[ $SUDO_UID -eq 0 ]]; then
 fi
 
 if ! lsb_release -c | grep -q jammy; then
-    echo "This script is recommended to be executed on a machine running Ubuntu 22.04 LTS"
+    echo "This script is recommended to be executed on a machine running Ubuntu 22.04 LTS with the GNOME desktop environment."
     if ! check_answer "Do you wish to continue?"; then exit 1; fi
 fi
 
@@ -75,7 +75,7 @@ RUNNING STEP: ${step%;*}
 #############################################\n" &>> ${LOGFILE}
     ${step#*;} &>> ${LOGFILE}
     if [[ $? -ne 0 ]]; then
-        echo -e "\r[$index/$total] ${RED}Something went wrong when running '${step%;*}'.${RESET}"
+        echo -e "\r[$index/$total] ${RED}Something went wrong when running '${step%;*}'. The usual cause is a network connection issue. Unless it keeps happening, skip reading the log and simply try again.${RESET}"
         if check_answer "Would you like to read the log file?"; then
             less ${LOGFILE}
         fi
@@ -334,7 +334,8 @@ while true; do
         * ) echo "Please answer with 1 or 2";;
     esac
 done
-# tput reset
+
+tput reset
 echo -e "${TITLE}"
 
 echo -e "\rStarting installation..."

@@ -297,7 +297,7 @@ while true; do
                 "Visual Studio Code;install_code"
                 "Install Flatpak;install_flatpak"
                 "Install SIM-PL;install_sim_pl"
-                # "Install Vivado;install_vivado"
+                "Install Vivado;install_vivado"
                 # "Upgrade packages;apt_upgrade"
                 "Remove unneeded packages;apt_autoremove"
                 "Replace Firefox snap with deb from Mozilla;install_firefox_deb"

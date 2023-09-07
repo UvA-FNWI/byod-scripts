@@ -274,6 +274,10 @@ EOF
     fi
 }
 
+function install_vim {
+    apt-get -y install vim
+}
+
 function apt_upgrade {
     DEBIAN_FRONTEND=noninteractive apt-get -yq upgrade &>> ${LOGFILE}
 }
@@ -290,6 +294,7 @@ while true; do
         [1] ) # Set Informatica year 1&2 variables
             mandatory=(
                 "Add Universe repository;add_universe_repository"
+                "Install Vim;install_vim"
                 "Install Git;install_git"
                 "Install C build tools;install_c_tools"
                 "Set up UvA-VPN;install_uvavpn"
@@ -310,6 +315,7 @@ while true; do
         [2] ) # Set Artificial Intelligence year 1 variables
             mandatory=(
                 "Add Universe repository;add_universe_repository"
+                "Install Vim;install_vim"
                 "Install Git;install_git"
                 "Install C build tools;install_c_tools"
                 "Set up UvA-VPN;install_uvavpn"

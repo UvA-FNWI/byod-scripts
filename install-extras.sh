@@ -16,7 +16,7 @@ Made by:
 Source: https://github.com/UvA-FNWI/byod-scripts
 Contact: laptops-fnwi@uva.nl
 "
-LOGFILE="install_extras.log"
+LOGFILE="install-extras.log"
 
 function check_answer {
     while true; do
@@ -345,6 +345,8 @@ done
 tput reset
 echo -e "${TITLE}"
 
+echo "Run 'tail -f install-extras.log' in a new terminal to monitor logs"
+
 echo -e "\rStarting installation..."
 echo
 
@@ -361,7 +363,7 @@ then
         step=${mandatory[$i]}
         description=${step%;*} # extract part before semicolon
         current_step_number=$(( 1 + i ))
-        if check_answer "${YELLOW}[$current_step_number/$total_steps]${RESET} Optional: Would you like to: $description?"; then
+        if check_answer "${YELLOW}[$current_step_number/$total_steps]${RESET} Would you like to: $description?"; then
             run_step "$step" $current_step_number $total_steps
         fi
     done

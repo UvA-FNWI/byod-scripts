@@ -17,6 +17,9 @@ Source: https://github.com/UvA-FNWI/byod-scripts
 Contact: laptops-fnwi@uva.nl
 "
 LOGFILE="install-extras.log"
+APT_OPTIONS="-y -o DPkg::Lock::Timeout=3600"
+
+set -e
 
 function check_answer {
     while true; do
@@ -59,6 +62,21 @@ if [ $(bc <<< "`(tput colors) 2>/dev/null || echo 0` >= 8") -eq 1 ]; then
     RESET=$(tput sgr0)
 fi
 
+function on_exit {
+    if [ $? != 0 ]; then
+        echo
+        echo
+        echo "${RED}The script encountered an error."
+        echo "It is likely caused by a network connection issue. Please try running the script again."
+        if check_answer "Would you like to read the log file?"; then
+            less ${LOGFILE}
+        fi
+    fi
+    echo
+}
+
+trap on_exit EXIT
+
 tput reset
 echo -e "${TITLE}"
 echo "Starting installation" > ${LOGFILE}
@@ -74,20 +92,13 @@ RUNNING STEP: ${step%;*}
 #############################################
 #############################################\n" &>> ${LOGFILE}
     ${step#*;} &>> ${LOGFILE}
-    if [[ $? -ne 0 ]]; then
-        echo -e "\r[$index/$total] ${RED}Something went wrong when running '${step%;*}'. The usual cause is a network connection issue. Unless it keeps happening, skip reading the log and simply try again.${RESET}"
-        if check_answer "Would you like to read the log file?"; then
-            less ${LOGFILE}
-        fi
-    else
-        # Spaces are required to fully overwrite the previous line
-        echo -e "\r${YELLOW}[$index/$total] ${GREEN}Done: ${step%;*}${RESET}               "
-    fi
+    # Spaces are required to fully overwrite the previous line
+    echo -e "\r${YELLOW}[$index/$total] ${GREEN}Done: ${step%;*}${RESET}               "
 }
 
 function add_universe_repository {
     add-apt-repository -y universe
-    apt update
+    apt-get $APT_OPTIONS update
 }
 
 function install_uvavpn {
@@ -95,7 +106,7 @@ function install_uvavpn {
     then
         # Gnome settings adds "VPN" to the name, so while it is
         # called just "UvA" here it will show up as "UvA VPN"
-        apt-get -y install network-manager-openconnect-gnome
+        apt-get $APT_OPTIONS install network-manager-openconnect-gnome
         nmcli con add type vpn \
                 con-name "UvA" \
                 ifname "*" \
@@ -122,7 +133,7 @@ fi'
 
 # Install functions
 function install_prolog {
-    apt-get -y install swi-prolog emacs emacs-goodies-extra-el
+    apt-get $APT_OPTIONS install swi-prolog emacs emacs-goodies-extra-el
 
     su "$SUDO_USER" -c ' echo "(setq auto-mode-alist (cons (cons \"\\\\.pl\" '\''prolog-mode) auto-mode-alist))" >> ~/.emacs '
     su "$SUDO_USER" -c ' echo "(require '\''color-theme)" >> ~/.emacs '
@@ -131,7 +142,7 @@ function install_prolog {
 }
 
 function install_java {
-    apt-get -y install openjdk-11-jre openjdk-11-jdk
+    apt-get $APT_OPTIONS install openjdk-11-jre openjdk-11-jdk
     sudo sed -i "s/^assistive_technologies=/#&/" /etc/java-11-openjdk/accessibility.properties
 }
 
@@ -142,14 +153,14 @@ function install_code {
         wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
         mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
         sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
-        apt-get -y install apt-transport-https
-        apt-get -y update
-        apt-get -y install code # or code-insiders
+        apt-get $APT_OPTIONS install apt-transport-https
+        apt-get $APT_OPTIONS update
+        apt-get $APT_OPTIONS install code # or code-insiders
     fi
 }
 
 function install_python {
-    apt-get -y install \
+    apt-get $APT_OPTIONS install \
             python3 \
             python3-pip \
             python3-virtualenv \
@@ -164,28 +175,28 @@ function install_python {
 function install_sql {
     sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password your_password'
     sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password your_password'
-    sudo apt-get -y install mysql-server
+    sudo apt-get $APT_OPTIONS install mysql-server
     mysql -u root -e "DROP USER 'root'@'localhost';
                       CREATE USER 'root'@'localhost' IDENTIFIED BY '';
                       GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost';
                       FLUSH PRIVILEGES;"
-    apt-get -y install sqlite libsqlite-dev mysql-client
+    apt-get $APT_OPTIONS install sqlite libsqlite-dev mysql-client
 }
 
 function install_atom {
     wget -qO- https://packagecloud.io/AtomEditor/atom/gpgkey | gpg --dearmor > atom.gpg
     mv atom.gpg /etc/apt/trusted.gpg.d/atom.gpg
     sudo sh -c 'echo "deb [arch=amd64] https://packagecloud.io/AtomEditor/atom/any/ any main" > /etc/apt/sources.list.d/atom.list'
-    apt-get -y update
-    apt-get -y install atom
+    apt-get $APT_OPTIONS update
+    apt-get $APT_OPTIONS install atom
 }
 
 function install_r {
-    apt-get -y install r-base
+    apt-get $APT_OPTIONS install r-base
 }
 
 function install_flatpak {
-    apt-get install -y flatpak gnome-software-plugin-flatpak
+    apt-get install $APT_OPTIONS flatpak gnome-software-plugin-flatpak
     flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 }
 
@@ -224,20 +235,20 @@ function install_protege {
 function install_sim_pl {
     # it's fine if this runs twice, add-apt-repository checks if already present in sources
     add-apt-repository -y ppa:uva-informatica/sim-pl
-    apt-get -y install sim-pl
+    apt-get $APT_OPTIONS install sim-pl
 }
 
 function install_vivado {
     add-apt-repository -y ppa:uva-informatica/meta-packages
-    apt-get -y install 5062arco6y
+    apt-get $APT_OPTIONS install 5062arco6y
 }
 
 function install_c_tools {
-    apt-get -y install build-essential clang lldb expect clang-tools valgrind gcc
+    apt-get $APT_OPTIONS install build-essential clang lldb expect clang-tools valgrind gcc
 }
 
 function install_git {
-    apt-get -y install git
+    apt-get $APT_OPTIONS install git
 }
 
 function install_chromium {
@@ -249,23 +260,40 @@ function install_firefox_deb {
     # laptops, with SSD, it can take nearly a minute. In addition, there are issues with browser
     # extensions that use native communication, like password managers.
 
-    # Receiving timely security updates for a browser is extremely important, so we don't want to use
-    # an unofficial distribution or manually download a package that won't be updated by students. This
-    # PPA seems to be official and provides immediate updates for all supported Ubuntu releases.
+    # Install upstream deb package from Mozilla:
+    # https://support.mozilla.org/en-US/kb/install-firefox-linux#w_install-firefox-deb-package-for-debian-based-distributions
     if snap info firefox | grep -q "installed"; then
-        cat << EOF > /etc/apt/preferences.d/firefox-no-snap
-Package: firefox*
-Pin: release o=Ubuntu*
-Pin-Priority: -1
+        cat << EOF > /etc/apt/preferences.d/mozilla
+Package: *
+Pin: origin packages.mozilla.org
+Pin-Priority: 1000
 EOF
-        apt-get remove -y firefox
+        apt-get $APT_OPTIONS remove firefox
         snap remove firefox
-        add-apt-repository -y ppa:mozillateam/ppa
-        apt-get install -y firefox
-        if command -v gsettings &> /dev/null
+        killall firefox || true
+        sudo install -d -m 0755 /etc/apt/keyrings
+        wget -q https://packages.mozilla.org/apt/repo-signing-key.gpg -O- | sudo tee /etc/apt/keyrings/packages.mozilla.org.asc > /dev/null
+        gpg -n -q --import --import-options import-show /etc/apt/keyrings/packages.mozilla.org.asc | awk '/pub/{getline; gsub(/^ +| +$/,""); if($0 == "35BAA0B33E9EB396F59CA838C0BA5CE6DC6315A3") print "\nThe key fingerprint matches ("$0").\n"; else print "\nVerification failed: the fingerprint ("$0") does not match the expected one.\n"}'
+        echo "deb [signed-by=/etc/apt/keyrings/packages.mozilla.org.asc] https://packages.mozilla.org/apt mozilla main" | sudo tee -a /etc/apt/sources.list.d/mozilla.list > /dev/null
+        apt-get $APT_OPTIONS update
+        apt-get $APT_OPTIONS install firefox firefox-l10n-nl
+        # Attempt to move data if snap data exists
+        if [ -d "~/snap/firefox/common/.mozilla/firefox/" ]; then
+            # If data already exists, create a backup instead of overwriting
+            if [ -d "~/.mozilla/firefox/" ]; then
+                RANDOM=$(shuf -er -n8  {A..Z} {a..z} {0..9} | tr -d '\n')
+                echo "Creating backup of existing Firefox data"
+                mv "~/.mozilla/firefox" "~/.mozilla/firefox.byod-backup-$RANDOM"
+            fi
+            mkdir -p ~/.mozilla/firefox/
+            echo "Moving snap Firefox data"
+            mv ~/snap/firefox/common/.mozilla/firefox/* ~/.mozilla/firefox/
+        fi
+
+        if command -v gsettings > /dev/null
         then
-            # Add back to GNOME panel favorites
-            gsettings set org.gnome.shell favorite-apps "$(gsettings get org.gnome.shell favorite-apps | sed s/.$//), 'firefox.desktop']"
+            # Add to GNOME panel favorites
+            gsettings set org.gnome.shell favorite-apps "['firefox.desktop', $(gsettings get org.gnome.shell favorite-apps | sed s/^.//)"
         else
             echo "gsettings not available, Ubuntu with different desktop environment?"
         fi
@@ -275,15 +303,15 @@ EOF
 }
 
 function install_vim {
-    apt-get -y install vim
+    apt-get $APT_OPTIONS install vim
 }
 
 function apt_upgrade {
-    DEBIAN_FRONTEND=noninteractive apt-get -yq upgrade &>> ${LOGFILE}
+    DEBIAN_FRONTEND=noninteractive apt-get $APT_OPTIONS upgrade
 }
 
 function apt_autoremove {
-    DEBIAN_FRONTEND=noninteractive apt-get -yq autoremove &>> ${LOGFILE}
+    DEBIAN_FRONTEND=noninteractive apt-get $APT_OPTIONS autoremove
 }
 
 echo "1) Informatica
@@ -300,7 +328,6 @@ while true; do
                 "Set up UvA-VPN;install_uvavpn"
                 "Install Python and extensions;install_python"
                 "Visual Studio Code;install_code"
-                "Install Flatpak;install_flatpak"
                 "Install SIM-PL;install_sim_pl"
                 "Install Vivado;install_vivado"
                 # "Upgrade packages;apt_upgrade"
@@ -320,13 +347,13 @@ while true; do
                 "Install C build tools;install_c_tools"
                 "Set up UvA-VPN;install_uvavpn"
                 "Install Python and extensions;install_python"
-                "Install curl;apt-get -y install curl"
+                "Install curl;apt-get $APT_OPTIONS install curl"
                 "Add .bashrc configuration;install_ai_bashrc"
                 "Install Prolog;install_prolog"
                 "Install SQL tools;install_sql"
                 # "Install Protege;install_protege"
                 "Install R;install_r"
-                "Install Weka;apt-get -y install weka"
+                "Install Weka;apt-get $APT_OPTIONS install weka"
                 "Install Visual Studio Code;install_code"
                 "Install Flatpak;install_flatpak"
                 # "Upgrade packages;apt_upgrade"

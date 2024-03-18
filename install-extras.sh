@@ -172,6 +172,8 @@ function install_python {
             jupyter
 }
 
+# disabled because it seems to be broken
+# ERROR 1045 (28000): Access denied for user 'root'@'localhost' (using password: NO)
 function install_sql {
     sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password your_password'
     sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password your_password'
@@ -350,7 +352,7 @@ while true; do
                 "Install curl;apt-get $APT_OPTIONS install curl"
                 "Add .bashrc configuration;install_ai_bashrc"
                 "Install Prolog;install_prolog"
-                "Install SQL tools;install_sql"
+                # "Install SQL tools;install_sql"
                 # "Install Protege;install_protege"
                 "Install R;install_r"
                 "Install Weka;apt-get $APT_OPTIONS install weka"

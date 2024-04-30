@@ -143,7 +143,6 @@ function install_prolog {
 
 function install_java {
     apt-get $APT_OPTIONS install openjdk-11-jre openjdk-11-jdk
-    sudo sed -i "s/^assistive_technologies=/#&/" /etc/java-11-openjdk/accessibility.properties
 }
 
 function install_code {

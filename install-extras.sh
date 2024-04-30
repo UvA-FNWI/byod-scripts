@@ -185,14 +185,6 @@ function install_sql {
     apt-get $APT_OPTIONS install sqlite libsqlite-dev mysql-client
 }
 
-function install_atom {
-    wget -qO- https://packagecloud.io/AtomEditor/atom/gpgkey | gpg --dearmor > atom.gpg
-    mv atom.gpg /etc/apt/trusted.gpg.d/atom.gpg
-    sudo sh -c 'echo "deb [arch=amd64] https://packagecloud.io/AtomEditor/atom/any/ any main" > /etc/apt/sources.list.d/atom.list'
-    apt-get $APT_OPTIONS update
-    apt-get $APT_OPTIONS install atom
-}
-
 function install_r {
     apt-get $APT_OPTIONS install r-base
 }

@@ -47,8 +47,8 @@ if [[ $SUDO_UID -eq 0 ]]; then
    exit 1
 fi
 
-if ! lsb_release -c | grep -q jammy; then
-    echo "This script is recommended to be executed on a machine running Ubuntu 22.04 LTS with the GNOME desktop environment."
+if ! lsb_release -c | grep -q noble; then
+    echo "This script is recommended to be executed on a machine running Ubuntu 24.04 LTS with the GNOME desktop environment."
     if ! check_answer "Do you wish to continue?"; then exit 1; fi
 fi
 

@@ -158,6 +158,12 @@ function install_code {
         apt-get $APT_OPTIONS install apt-transport-https
         apt-get $APT_OPTIONS update
         apt-get $APT_OPTIONS install code # or code-insiders
+        # add code to sidebar
+        if command -v gsettings > /dev/null; then
+            su "$SUDO_USER" -c $'gsettings set org.gnome.shell favorite-apps "[\'code.desktop\', $(gsettings get org.gnome.shell favorite-apps | sed s/^.//)"'
+        else
+            echo "gsettings not available, Ubuntu with different desktop environment?"
+        fi
     fi
 }
 

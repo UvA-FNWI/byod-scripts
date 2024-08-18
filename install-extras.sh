@@ -273,7 +273,7 @@ EOF
             if [ -d "~/snap/firefox/common/.mozilla/firefox/" ]; then
                 # If data already exists, create a backup instead of overwriting
                 if [ -d "~/.mozilla/firefox/" ]; then
-                    RANDOM=$(shuf -er -n8  {A..Z} {a..z} {0..9} | tr -d '\n')
+                    RANDOM=$(shuf -er -n8  {A..Z} {a..z} {0..9} | tr -d \'\n\')
                     echo "Creating backup of existing Firefox data"
                     mv "~/.mozilla/firefox" "~/.mozilla/firefox.byod-backup-$RANDOM"
                 fi
@@ -284,7 +284,7 @@ EOF
 
             if command -v gsettings > /dev/null; then
                 # Add to GNOME panel favorites
-    gsettings set org.gnome.shell favorite-apps "['firefox.desktop', $(gsettings get org.gnome.shell favorite-apps | sed s/^.//)"
+    gsettings set org.gnome.shell favorite-apps "[\'firefox.desktop\', $(gsettings get org.gnome.shell favorite-apps | sed s/^.//)"
             else
                 echo "gsettings not available, Ubuntu with different desktop environment?"
             fi

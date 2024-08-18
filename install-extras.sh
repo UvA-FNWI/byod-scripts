@@ -136,7 +136,7 @@ function install_prolog {
     apt-get $APT_OPTIONS install swi-prolog
     # emacs now has postfix as a recommended (transitive) dep.
     # i know emacs is an os, but that is a bit much (and it messes up our noninteractive install)
-    apt-get $APT_OPTIONS --no-install-recommends emacs emacs-goodies-extra-el
+    apt-get $APT_OPTIONS install --no-install-recommends emacs emacs-goodies-extra-el
 
     su "$SUDO_USER" -c ' echo "(setq auto-mode-alist (cons (cons \"\\\\.pl\" '\''prolog-mode) auto-mode-alist))" >> ~/.emacs '
     su "$SUDO_USER" -c ' echo "(require '\''color-theme)" >> ~/.emacs '

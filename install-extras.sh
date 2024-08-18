@@ -162,13 +162,7 @@ function install_python {
     apt-get $APT_OPTIONS install \
             python3 \
             python3-pip \
-            python3-virtualenv \
-            python3-numpy \
-            python3-scipy \
-            python3-matplotlib \
-            python3-willow \
-            python3-nltk \
-            jupyter
+            python3-virtualenv
 }
 
 # disabled because it seems to be broken
@@ -299,6 +293,45 @@ function install_vim {
     apt-get $APT_OPTIONS install vim
 }
 
+function install_arduino_ide {
+    apt-get $APT_OPTIONS install libfuse2
+
+    wget -q https://downloads.arduino.cc/arduino-ide/arduino-ide_2.3.2_Linux_64bit.AppImage -O /usr/local/bin/arduino-ide
+    chmod a+x /usr/local/bin/arduino-ide
+
+    # Workaround for namespace restrictions added in noble
+    cat << EOF > /etc/apparmor.d/arduino-ide
+abi <abi/4.0>,
+include <tunables/global>
+
+profile arduino-ide /usr/local/bin/arduino-ide flags=(unconfined) {
+    userns,
+    include if exists <local/arduino-ide>
+}
+EOF
+    systemctl reload apparmor
+
+    # So you can find it in the launcher
+    cat <<EOF > /usr/share/applications/arduino-ide.desktop
+[Desktop Entry]
+Name=Arduino IDE
+Exec=/usr/local/bin/arduino-ide
+Type=Application
+Terminal=false
+EOF
+
+    # User needs serial permissions; add them to dialout group
+    usermod -aG dialout $SUDO_USER
+}
+
+# Note that the rye installation script requires curl, so this must be
+# sequenced after installing curl.
+function install_rye {
+    su "$SUDO_USER" -c '
+        curl -sSf https://rye.astral.sh/get | RYE_INSTALL_OPTION="--yes" bash
+    '
+}
+
 function apt_upgrade {
     DEBIAN_FRONTEND=noninteractive apt-get $APT_OPTIONS upgrade
 }
@@ -315,13 +348,17 @@ while true; do
         [1] ) # Set Informatica year 1&2 variables
             mandatory=(
                 "Add Universe repository;add_universe_repository"
+                "Install curl;apt-get $APT_OPTIONS install curl"
                 "Install Vim;install_vim"
                 "Install Git;install_git"
                 "Install C build tools;install_c_tools"
                 "Set up UvA-VPN;install_uvavpn"
-                "Install Python and extensions;install_python"
+                # This does not install any extensions anymore; courses should use proper venvs or Poetry or rye.
+                "Install Python;install_python"
+                "Install Rye;install_rye"
                 "Visual Studio Code;install_code"
                 "Install SIM-PL;install_sim_pl"
+                "Install Arduino IDE;install_arduino_ide"
                 "Install Vivado;install_vivado"
                 # "Upgrade packages;apt_upgrade"
                 "Remove unneeded packages;apt_autoremove"
@@ -335,12 +372,14 @@ while true; do
         [2] ) # Set Artificial Intelligence year 1 variables
             mandatory=(
                 "Add Universe repository;add_universe_repository"
+                "Install curl;apt-get $APT_OPTIONS install curl"
                 "Install Vim;install_vim"
                 "Install Git;install_git"
                 "Install C build tools;install_c_tools"
                 "Set up UvA-VPN;install_uvavpn"
-                "Install Python and extensions;install_python"
-                "Install curl;apt-get $APT_OPTIONS install curl"
+                # This does not install any extensions anymore; courses should use proper venvs or Poetry or rye.
+                "Install Python;install_python"
+                "Install Rye;install_rye"
                 "Add .bashrc configuration;install_ai_bashrc"
                 "Install Prolog;install_prolog"
                 # "Install SQL tools;install_sql"

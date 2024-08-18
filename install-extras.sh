@@ -250,6 +250,7 @@ function install_firefox_deb {
     # Install upstream deb package from Mozilla:
     # https://support.mozilla.org/en-US/kb/install-firefox-linux#w_install-firefox-deb-package-for-debian-based-distributions
     if snap info firefox | grep -q "installed"; then
+        apt-get $APT_OPTIONS install dbus-x11
         cat << EOF > /etc/apt/preferences.d/mozilla
 Package: *
 Pin: origin packages.mozilla.org
@@ -264,26 +265,27 @@ EOF
         echo "deb [signed-by=/etc/apt/keyrings/packages.mozilla.org.asc] https://packages.mozilla.org/apt mozilla main" | sudo tee -a /etc/apt/sources.list.d/mozilla.list > /dev/null
         apt-get $APT_OPTIONS update
         apt-get $APT_OPTIONS install firefox firefox-l10n-nl
-        # Attempt to move data if snap data exists
-        if [ -d "~/snap/firefox/common/.mozilla/firefox/" ]; then
-            # If data already exists, create a backup instead of overwriting
-            if [ -d "~/.mozilla/firefox/" ]; then
-                RANDOM=$(shuf -er -n8  {A..Z} {a..z} {0..9} | tr -d '\n')
-                echo "Creating backup of existing Firefox data"
-                mv "~/.mozilla/firefox" "~/.mozilla/firefox.byod-backup-$RANDOM"
+        su "$SUDO_USER" -c $'
+            # Attempt to move data if snap data exists
+            if [ -d "~/snap/firefox/common/.mozilla/firefox/" ]; then
+                # If data already exists, create a backup instead of overwriting
+                if [ -d "~/.mozilla/firefox/" ]; then
+                    RANDOM=$(shuf -er -n8  {A..Z} {a..z} {0..9} | tr -d '\n')
+                    echo "Creating backup of existing Firefox data"
+                    mv "~/.mozilla/firefox" "~/.mozilla/firefox.byod-backup-$RANDOM"
+                fi
+                mkdir -p ~/.mozilla/firefox/
+                echo "Moving snap Firefox data"
+                mv ~/snap/firefox/common/.mozilla/firefox/* ~/.mozilla/firefox/
             fi
-            mkdir -p ~/.mozilla/firefox/
-            echo "Moving snap Firefox data"
-            mv ~/snap/firefox/common/.mozilla/firefox/* ~/.mozilla/firefox/
-        fi
 
-        if command -v gsettings > /dev/null
-        then
-            # Add to GNOME panel favorites
-            gsettings set org.gnome.shell favorite-apps "['firefox.desktop', $(gsettings get org.gnome.shell favorite-apps | sed s/^.//)"
-        else
-            echo "gsettings not available, Ubuntu with different desktop environment?"
-        fi
+            if command -v gsettings > /dev/null; then
+                # Add to GNOME panel favorites
+    gsettings set org.gnome.shell favorite-apps "['firefox.desktop', $(gsettings get org.gnome.shell favorite-apps | sed s/^.//)"
+            else
+                echo "gsettings not available, Ubuntu with different desktop environment?"
+            fi
+        '
     else
         echo "Skipping, firefox snap not installed"
     fi

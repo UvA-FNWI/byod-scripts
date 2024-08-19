@@ -47,8 +47,8 @@ if [[ $SUDO_UID -eq 0 ]]; then
    exit 1
 fi
 
-if ! lsb_release -c | grep -q jammy; then
-    echo "This script is recommended to be executed on a machine running Ubuntu 22.04 LTS with the GNOME desktop environment."
+if ! lsb_release -c | grep -q noble; then
+    echo "This script is recommended to be executed on a machine running Ubuntu 24.04 LTS with the GNOME desktop environment."
     if ! check_answer "Do you wish to continue?"; then exit 1; fi
 fi
 
@@ -133,7 +133,10 @@ fi'
 
 # Install functions
 function install_prolog {
-    apt-get $APT_OPTIONS install swi-prolog emacs emacs-goodies-extra-el
+    apt-get $APT_OPTIONS install swi-prolog
+    # emacs now has postfix as a recommended (transitive) dep.
+    # i know emacs is an os, but that is a bit much (and it messes up our noninteractive install)
+    apt-get $APT_OPTIONS install --no-install-recommends emacs emacs-goodies-extra-el
 
     su "$SUDO_USER" -c ' echo "(setq auto-mode-alist (cons (cons \"\\\\.pl\" '\''prolog-mode) auto-mode-alist))" >> ~/.emacs '
     su "$SUDO_USER" -c ' echo "(require '\''color-theme)" >> ~/.emacs '
@@ -143,19 +146,25 @@ function install_prolog {
 
 function install_java {
     apt-get $APT_OPTIONS install openjdk-11-jre openjdk-11-jdk
-    sudo sed -i "s/^assistive_technologies=/#&/" /etc/java-11-openjdk/accessibility.properties
 }
 
 function install_code {
     if dpkg -l code; then
         echo "Skipping, Visual Studio Code already installed"
     else
+        apt-get $APT_OPTIONS install dbus-x11
         wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
         mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
         sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
         apt-get $APT_OPTIONS install apt-transport-https
         apt-get $APT_OPTIONS update
         apt-get $APT_OPTIONS install code # or code-insiders
+        # add code to sidebar
+        if command -v gsettings > /dev/null; then
+            su "$SUDO_USER" -c $'gsettings set org.gnome.shell favorite-apps "[\'code.desktop\', $(gsettings get org.gnome.shell favorite-apps | sed s/^.//)"'
+        else
+            echo "gsettings not available, Ubuntu with different desktop environment?"
+        fi
     fi
 }
 
@@ -163,13 +172,7 @@ function install_python {
     apt-get $APT_OPTIONS install \
             python3 \
             python3-pip \
-            python3-virtualenv \
-            python3-numpy \
-            python3-scipy \
-            python3-matplotlib \
-            python3-willow \
-            python3-nltk \
-            jupyter
+            python3-virtualenv
 }
 
 # disabled because it seems to be broken
@@ -183,14 +186,6 @@ function install_sql {
                       GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost';
                       FLUSH PRIVILEGES;"
     apt-get $APT_OPTIONS install sqlite libsqlite-dev mysql-client
-}
-
-function install_atom {
-    wget -qO- https://packagecloud.io/AtomEditor/atom/gpgkey | gpg --dearmor > atom.gpg
-    mv atom.gpg /etc/apt/trusted.gpg.d/atom.gpg
-    sudo sh -c 'echo "deb [arch=amd64] https://packagecloud.io/AtomEditor/atom/any/ any main" > /etc/apt/sources.list.d/atom.list'
-    apt-get $APT_OPTIONS update
-    apt-get $APT_OPTIONS install atom
 }
 
 function install_r {
@@ -265,6 +260,7 @@ function install_firefox_deb {
     # Install upstream deb package from Mozilla:
     # https://support.mozilla.org/en-US/kb/install-firefox-linux#w_install-firefox-deb-package-for-debian-based-distributions
     if snap info firefox | grep -q "installed"; then
+        apt-get $APT_OPTIONS install dbus-x11
         cat << EOF > /etc/apt/preferences.d/mozilla
 Package: *
 Pin: origin packages.mozilla.org
@@ -279,26 +275,27 @@ EOF
         echo "deb [signed-by=/etc/apt/keyrings/packages.mozilla.org.asc] https://packages.mozilla.org/apt mozilla main" | sudo tee -a /etc/apt/sources.list.d/mozilla.list > /dev/null
         apt-get $APT_OPTIONS update
         apt-get $APT_OPTIONS install firefox firefox-l10n-nl
-        # Attempt to move data if snap data exists
-        if [ -d "~/snap/firefox/common/.mozilla/firefox/" ]; then
-            # If data already exists, create a backup instead of overwriting
-            if [ -d "~/.mozilla/firefox/" ]; then
-                RANDOM=$(shuf -er -n8  {A..Z} {a..z} {0..9} | tr -d '\n')
-                echo "Creating backup of existing Firefox data"
-                mv "~/.mozilla/firefox" "~/.mozilla/firefox.byod-backup-$RANDOM"
+        su "$SUDO_USER" -c $'
+            # Attempt to move data if snap data exists
+            if [ -d "~/snap/firefox/common/.mozilla/firefox/" ]; then
+                # If data already exists, create a backup instead of overwriting
+                if [ -d "~/.mozilla/firefox/" ]; then
+                    RANDOM=$(shuf -er -n8  {A..Z} {a..z} {0..9} | tr -d \'\n\')
+                    echo "Creating backup of existing Firefox data"
+                    mv "~/.mozilla/firefox" "~/.mozilla/firefox.byod-backup-$RANDOM"
+                fi
+                mkdir -p ~/.mozilla/firefox/
+                echo "Moving snap Firefox data"
+                mv ~/snap/firefox/common/.mozilla/firefox/* ~/.mozilla/firefox/
             fi
-            mkdir -p ~/.mozilla/firefox/
-            echo "Moving snap Firefox data"
-            mv ~/snap/firefox/common/.mozilla/firefox/* ~/.mozilla/firefox/
-        fi
 
-        if command -v gsettings > /dev/null
-        then
-            # Add to GNOME panel favorites
-            gsettings set org.gnome.shell favorite-apps "['firefox.desktop', $(gsettings get org.gnome.shell favorite-apps | sed s/^.//)"
-        else
-            echo "gsettings not available, Ubuntu with different desktop environment?"
-        fi
+            if command -v gsettings > /dev/null; then
+                # Add to GNOME panel favorites
+    gsettings set org.gnome.shell favorite-apps "[\'firefox.desktop\', $(gsettings get org.gnome.shell favorite-apps | sed s/^.//)"
+            else
+                echo "gsettings not available, Ubuntu with different desktop environment?"
+            fi
+        '
     else
         echo "Skipping, firefox snap not installed"
     fi
@@ -306,6 +303,45 @@ EOF
 
 function install_vim {
     apt-get $APT_OPTIONS install vim
+}
+
+function install_arduino_ide {
+    apt-get $APT_OPTIONS install libfuse2
+
+    wget -q https://downloads.arduino.cc/arduino-ide/arduino-ide_2.3.2_Linux_64bit.AppImage -O /usr/local/bin/arduino-ide
+    chmod a+x /usr/local/bin/arduino-ide
+
+    # Workaround for namespace restrictions added in noble
+    cat << EOF > /etc/apparmor.d/arduino-ide
+abi <abi/4.0>,
+include <tunables/global>
+
+profile arduino-ide /usr/local/bin/arduino-ide flags=(unconfined) {
+    userns,
+    include if exists <local/arduino-ide>
+}
+EOF
+    systemctl reload apparmor
+
+    # So you can find it in the launcher
+    cat <<EOF > /usr/share/applications/arduino-ide.desktop
+[Desktop Entry]
+Name=Arduino IDE
+Exec=/usr/local/bin/arduino-ide
+Type=Application
+Terminal=false
+EOF
+
+    # User needs serial permissions; add them to dialout group
+    usermod -aG dialout $SUDO_USER
+}
+
+# Note that the rye installation script requires curl, so this must be
+# sequenced after installing curl.
+function install_rye {
+    su "$SUDO_USER" -c '
+        curl -sSf https://rye.astral.sh/get | RYE_INSTALL_OPTION="--yes" bash
+    '
 }
 
 function apt_upgrade {
@@ -324,13 +360,17 @@ while true; do
         [1] ) # Set Informatica year 1&2 variables
             mandatory=(
                 "Add Universe repository;add_universe_repository"
+                "Install curl;apt-get $APT_OPTIONS install curl"
                 "Install Vim;install_vim"
                 "Install Git;install_git"
                 "Install C build tools;install_c_tools"
                 "Set up UvA-VPN;install_uvavpn"
-                "Install Python and extensions;install_python"
+                # This does not install any extensions anymore; courses should use proper venvs or Poetry or rye.
+                "Install Python;install_python"
+                "Install Rye;install_rye"
                 "Visual Studio Code;install_code"
                 "Install SIM-PL;install_sim_pl"
+                "Install Arduino IDE;install_arduino_ide"
                 "Install Vivado;install_vivado"
                 # "Upgrade packages;apt_upgrade"
                 "Remove unneeded packages;apt_autoremove"
@@ -344,12 +384,14 @@ while true; do
         [2] ) # Set Artificial Intelligence year 1 variables
             mandatory=(
                 "Add Universe repository;add_universe_repository"
+                "Install curl;apt-get $APT_OPTIONS install curl"
                 "Install Vim;install_vim"
                 "Install Git;install_git"
                 "Install C build tools;install_c_tools"
                 "Set up UvA-VPN;install_uvavpn"
-                "Install Python and extensions;install_python"
-                "Install curl;apt-get $APT_OPTIONS install curl"
+                # This does not install any extensions anymore; courses should use proper venvs or Poetry or rye.
+                "Install Python;install_python"
+                "Install Rye;install_rye"
                 "Add .bashrc configuration;install_ai_bashrc"
                 "Install Prolog;install_prolog"
                 # "Install SQL tools;install_sql"

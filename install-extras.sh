@@ -237,7 +237,7 @@ function install_sim_pl {
 
 function install_vivado {
     add-apt-repository -y ppa:uva-informatica/meta-packages
-    apt-get $APT_OPTIONS install 5062arco6y
+    #apt-get $APT_OPTIONS install 5062arco6y
 }
 
 function install_c_tools {

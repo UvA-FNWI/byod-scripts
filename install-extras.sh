@@ -364,7 +364,7 @@ while true; do
                 "Install Vim;install_vim"
                 "Install Git;install_git"
                 "Install C build tools;install_c_tools"
-                "Set up UvA-VPN;install_uvavpn"
+                # "Set up UvA-VPN;install_uvavpn"
                 # This does not install any extensions anymore; courses should use proper venvs or Poetry or rye.
                 "Install Python;install_python"
                 "Install Rye;install_rye"
@@ -388,7 +388,7 @@ while true; do
                 "Install Vim;install_vim"
                 "Install Git;install_git"
                 "Install C build tools;install_c_tools"
-                "Set up UvA-VPN;install_uvavpn"
+                # "Set up UvA-VPN;install_uvavpn"
                 # This does not install any extensions anymore; courses should use proper venvs or Poetry or rye.
                 "Install Python;install_python"
                 "Install Rye;install_rye"

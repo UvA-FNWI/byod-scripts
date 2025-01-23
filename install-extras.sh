@@ -118,6 +118,14 @@ function install_uvavpn {
     fi
 }
 
+function install_eduvpn {
+    sudo apt-get install -y apt-transport-https wget
+    wget -O- https://app.eduvpn.org/linux/v4/deb/app+linux@eduvpn.org.asc | gpg --dearmor | sudo tee /usr/share/keyrings/eduvpn-v4.gpg >/dev/null
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/eduvpn-v4.gpg] https://app.eduvpn.org/linux/v4/deb/ $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/eduvpn-v4.list
+    sudo apt-get update -y
+    sudo apt-get install -y eduvpn-client
+}
+
 function install_ai_bashrc {
     su "$SUDO_USER" -c ' mkdir -p ~/bin;
 if [ -z "`grep \"BscKI\" ~/.bashrc`" ]; then
@@ -364,7 +372,7 @@ while true; do
                 "Install Vim;install_vim"
                 "Install Git;install_git"
                 "Install C build tools;install_c_tools"
-                # "Set up UvA-VPN;install_uvavpn"
+                "Install eduVPN;install_eduvpn"
                 # This does not install any extensions anymore; courses should use proper venvs or Poetry or rye.
                 "Install Python;install_python"
                 "Install Rye;install_rye"
@@ -388,7 +396,7 @@ while true; do
                 "Install Vim;install_vim"
                 "Install Git;install_git"
                 "Install C build tools;install_c_tools"
-                # "Set up UvA-VPN;install_uvavpn"
+                "Install eduVPN;install_eduvpn"
                 # This does not install any extensions anymore; courses should use proper venvs or Poetry or rye.
                 "Install Python;install_python"
                 "Install Rye;install_rye"
